@@ -1,0 +1,20 @@
+{% extends "store/base.html" %}
+
+{% block title %}{{ category }}s - Golf Store{% endblock %}
+
+{% block content %}
+    <h1>{{ category }}s</h1>
+
+    <div class="products">
+        {% for product in products %}
+            <div class="product-card">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+                <p><strong>${{ product.price }}</strong></p>
+            </div>
+        {% empty %}
+            <p>No products in this category yet.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
