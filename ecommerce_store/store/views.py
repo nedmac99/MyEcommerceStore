@@ -4,13 +4,16 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from .models import Product, Order, OrderItem
 
-def home(request):
-    products = Product.objects.all()
-    return render(request, 'store/home.html', {'products': products})
+def homepage(request):
+    categories = ['driver', 'wood', 'hybrid', 'iron', 'wedge', 'putter']
+    featured_products = {}
+    for cat in categories:
+        featured_products[cat] = Product.objects.filter(category=cat)[:3]
+    return render(request, 'store/homepage.html', {'featured_products': featured_products})
 
-def product_detail(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    return render(request, 'store/product_detail.html', {'product': product})
+def product_category(request, category_name):
+    products = Product.objects.filter(category=category_name)
+    return render(request, 'store/category.html', {'products': products, 'category': category_name.capitalize()})
 
 
 @login_required
