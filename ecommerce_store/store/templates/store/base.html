@@ -13,6 +13,10 @@
         .product-card img { width: 100%; }
         .product-card h2 { font-size: 18px; margin: 10px 0 5px; }
         .product-card p { margin: 5px 0; }
+        /* Cart link styles */
+        .cart-link { float: right; display: inline-flex; align-items: center; gap: 8px; color: #333; text-decoration: none; }
+        .cart-link svg { width: 20px; height: 20px; fill: none; stroke: #333; stroke-width: 1.5; }
+        .cart-badge { background: #e60023; color: white; border-radius: 999px; padding: 2px 7px; font-size: 12px; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -26,6 +30,15 @@
         <a href="{% url 'product_category' 'iron' %}">Irons</a>
         <a href="{% url 'product_category' 'wedge' %}">Wedges</a>
         <a href="{% url 'product_category' 'putter' %}">Putters</a>
+        <a class="cart-link" href="{% url 'cart' %}" aria-label="View cart">
+            <!-- simple cart SVG -->
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="10" cy="20" r="1.5" />
+                <circle cx="18" cy="20" r="1.5" />
+            </svg>
+            <span class="cart-badge">{{ cart_item_count }}</span>
+        </a>
     </nav>
 
     <!-- Page Content -->

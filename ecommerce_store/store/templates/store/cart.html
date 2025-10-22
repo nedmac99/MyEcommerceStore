@@ -9,7 +9,10 @@
 {% if order %}
     <ul>
         {% for item in order.items.all %}
-            <li>{{ item.product.name }} - ${{ item.product.price }} x {{ item.quantity }}</li>
+            <li>
+                {{ item.product.name }} - ${{ item.product.price }} x {{ item.quantity }}
+                <a href="{% url 'remove_from_cart' item.product.id %}" style="margin-left:10px;color:#c00;">Remove</a>
+            </li>
         {% endfor %}
     </ul>
     <p>Total: ${{ order.total_price }}</p>
@@ -18,6 +21,6 @@
     <p>Your cart is empty.</p>
 {% endif %}
 
-<a href="{% url 'home' %}">Continue Shopping</a>
+<a href="{% url 'homepage' %}">Continue Shopping</a>
 </body>
 </html>

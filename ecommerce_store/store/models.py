@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
+from django.urls import reverse
 
 class Product(models.Model):
     CATEGORY_CHOICES = [
@@ -16,9 +18,25 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='driver')
     image = models.ImageField(upload_to='products/')
+    slug = models.SlugField(max_length=120, unique=False, blank=True, null=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        # auto-generate a unique slug if it's not set
+        if not self.slug:
+            base = slugify(self.name)[:110]
+            slug_candidate = base
+            counter = 1
+            while Product.objects.filter(slug=slug_candidate).exists():
+                slug_candidate = f"{base}-{counter}"
+                counter += 1
+            self.slug = slug_candidate
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('product_detail', args=[self.id, self.slug])
 
 class Order(models.Model):
     STATUS = (

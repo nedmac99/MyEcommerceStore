@@ -5,14 +5,17 @@
 {% block content %}
     <h1>Welcome to The Clubhouse</h1>
     <p>Browse our collection of golf clubs by category.</p>
+    <h2>Featured clubs</h2>
 
     {% for cat_name, cat_products in featured_products.items %}
         <h2>{{ cat_name|capfirst }}</h2>
         <div class="products">
             {% for product in cat_products %}
                 <div class="product-card">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                    <h2>{{ product.name }}</h2>
+                    <a href="{% url 'product_category' cat_name %}">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    </a>
+                    <h2><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h2>
                     <p>{{ product.description }}</p>
                     <p><strong>${{ product.price }}</strong></p>
                 </div>
