@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Golf Store{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        nav a { margin-right: 10px; text-decoration: none; color: #333; }
+        nav a:hover { text-decoration: underline; }
+        .products { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
+        .product-card { border: 1px solid #ccc; padding: 10px; width: 200px; }
+        .product-card img { width: 100%; }
+        .product-card h2 { font-size: 18px; margin: 10px 0 5px; }
+        .product-card p { margin: 5px 0; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="{% url 'homepage' %}">Home</a>
+        <a href="{% url 'product_category' 'driver' %}">Drivers</a>
+        <a href="{% url 'product_category' 'wood' %}">Woods</a>
+        <a href="{% url 'product_category' 'hybrid' %}">Hybrids</a>
+        <a href="{% url 'product_category' 'iron' %}">Irons</a>
+        <a href="{% url 'product_category' 'wedge' %}">Wedges</a>
+        <a href="{% url 'product_category' 'putter' %}">Putters</a>
+    </nav>
+
+    <!-- Page Content -->
+    {% block content %}{% endblock %}
+
+</body>
+</html>
