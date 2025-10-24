@@ -5,13 +5,20 @@
     <title>{% block title %}The Clubhouse{% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'store/css/base.css' %}">
+    <link rel="icon" href="{% static 'store/images/golf_club_icon.jpg' %}" type="image/jpeg">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
 
     <!-- Navigation -->
     <nav class="main-nav">
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+            <img src="{% static 'store/images/golf_club_icon.jpg' %}" alt="Menu" class="nav-toggle-icon">
+        </button>
         <div class="nav-left">
+            <a class="brand" href="{% url 'homepage' %}" aria-label="Home">
+                <img src="{% static 'store/images/golf_club_icon.jpg' %}" alt="The Clubhouse" class="site-icon">
+            </a>
             <a href="{% url 'homepage' %}">Home</a>
             <a href="{% url 'product_category' 'driver' %}">Drivers</a>
             <a href="{% url 'product_category' 'wood' %}">Woods</a>
@@ -21,7 +28,6 @@
             <a href="{% url 'product_category' 'putter' %}">Putters</a>
         </div>
         <div class="nav-right">
-            <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
             <a class="cart-link" href="{% url 'cart' %}" aria-label="View cart">
                 <!-- simple cart SVG -->
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
