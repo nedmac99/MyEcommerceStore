@@ -3,7 +3,8 @@ from .models import Product
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from .models import Product, Order, OrderItem
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
+from django.views.decorators.http import require_POST
 
 
 def homepage(request):
@@ -27,47 +28,111 @@ def product_detail(request, pk, slug):
 
 
 @login_required
+@login_required
+@require_POST
 def add_to_cart(request, product_id):
     product = Product.objects.get(id=product_id)
-    
+
     # Check if user has an open order
     order, created = Order.objects.get_or_create(user=request.user, status='Pending', defaults={'total_price': 0})
-    
+
     # Check if the product is already in the order
     order_item, item_created = OrderItem.objects.get_or_create(order=order, product=product)
-    
+
     if not item_created:
         order_item.quantity += 1
         order_item.save()
-    
+
     # Update total price
     order.total_price = sum(item.product.price * item.quantity for item in order.items.all())
     order.save()
-    
+
+    # If AJAX request, return JSON so frontend can update without reload
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        count = sum(i.quantity for i in order.items.all())
+        return JsonResponse({
+            'cart_item_count': count,
+            'order_total': str(order.total_price),
+            'product_name': product.name,
+            'product_id': product_id,
+        })
+
     return redirect('cart')
 
 
 @login_required
+@require_POST
 def remove_from_cart(request, product_id):
     # Remove or decrement the product from the user's pending order
     order = Order.objects.filter(user=request.user, status='Pending').first()
     if not order:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'error': 'no_order'}, status=400)
         return redirect('cart')
     try:
         item = OrderItem.objects.get(order=order, product__id=product_id)
     except OrderItem.DoesNotExist:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'error': 'item_not_found'}, status=404)
         return redirect('cart')
 
     # If quantity > 1, decrement, else remove
     if item.quantity > 1:
         item.quantity -= 1
         item.save()
+        new_quantity = item.quantity
     else:
         item.delete()
+        new_quantity = 0
 
     # Update total price
     order.total_price = sum(i.product.price * i.quantity for i in order.items.all())
     order.save()
+
+    # If AJAX request, return JSON so frontend can update without reload
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        count = sum(i.quantity for i in order.items.all())
+        return JsonResponse({
+            'cart_item_count': count,
+            'order_total': str(order.total_price),
+            'product_id': product_id,
+            'item_quantity': new_quantity,
+        })
+
+    return redirect('cart')
+
+
+@login_required
+@require_POST
+def remove_all_from_cart(request, product_id):
+    # Remove the OrderItem entirely
+    order = Order.objects.filter(user=request.user, status='Pending').first()
+    if not order:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'error': 'no_order'}, status=400)
+        return redirect('cart')
+    try:
+        item = OrderItem.objects.get(order=order, product__id=product_id)
+    except OrderItem.DoesNotExist:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'error': 'item_not_found'}, status=404)
+        return redirect('cart')
+
+    item.delete()
+
+    # Update total price
+    order.total_price = sum(i.product.price * i.quantity for i in order.items.all())
+    order.save()
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        count = sum(i.quantity for i in order.items.all())
+        return JsonResponse({
+            'cart_item_count': count,
+            'order_total': str(order.total_price),
+            'product_id': product_id,
+            'item_quantity': 0,
+        })
+
     return redirect('cart')
 
 @login_required

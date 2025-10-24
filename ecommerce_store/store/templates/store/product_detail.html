@@ -1,18 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ product.name }}</title>
-</head>
-<body>
-<h1>{{ product.name }}</h1>
-<img src="{{ product.image.url }}" width="200">
-<p>{{ product.description }}</p>
-<p>Price: ${{ product.price }}</p>
-{% if user.is_authenticated %}
-    <a href="{% url 'add_to_cart' product.id %}">Add to Cart</a>
-{% else %}
-    <p><a href="/admin/login/">Login to add to cart</a></p>
-{% endif %}
+{% extends 'store/base.html' %}
 
-</body>
-</html>
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+    <h1>{{ product.name }}</h1>
+    <img src="{{ product.image.url }}" width="200">
+    <p>{{ product.description }}</p>
+    <p>Price: ${{ product.price }}</p>
+    {% if user.is_authenticated %}
+        <form class="add-to-cart-form" method="post" action="{% url 'add_to_cart' product.id %}">
+            {% csrf_token %}
+            <button type="submit">Add to Cart</button>
+        </form>
+    {% else %}
+        <p><a href="/admin/login/">Login to add to cart</a></p>
+    {% endif %}
+{% endblock %}
