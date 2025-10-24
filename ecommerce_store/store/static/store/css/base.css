@@ -30,6 +30,8 @@ nav a:hover { text-decoration: underline; }
     .main-nav { flex-direction: column; align-items: stretch; padding-top: 88px; background: white; }
     /* Absolutely position the cart area so it stays top-right and doesn't flow under stacked links */
     .nav-right { position: absolute; top: 12px; right: 12px; margin-left: 0; z-index: 1000; background: transparent; }
+    /* Position the toggle on the left so it remains visible when nav-left is hidden */
+    .nav-toggle { position: absolute; top: 12px; left: 12px; z-index: 1001; }
     /* Hide category links by default on mobile; they will be shown when the menu is toggled */
     .nav-left { display: none; width: 100%; }
     .nav-left.open, .main-nav.nav-open .nav-left { display: block; }
@@ -43,3 +45,13 @@ nav a:hover { text-decoration: underline; }
 
 /* Small utility: toast container default styles (JS may inject/override) */
 #toast-container .toast { background: #222; color: #fff; padding: 10px 14px; border-radius: 6px; margin-bottom: 10px; opacity: .98; }
+
+/* Site brand icon used in the header/nav */
+.site-icon { width: 32px; height: 32px; object-fit: cover; border-radius: 6px; display: inline-block; vertical-align: middle; }
+.brand { display: inline-flex; align-items: center; margin-right: 8px; }
+
+/* Use the golf club image as the hamburger/menu icon */
+.nav-toggle { background: transparent; border: none; padding: 0; cursor: pointer; }
+.nav-toggle { background: transparent; border: none; padding: 2px; cursor: pointer; }
+.nav-toggle-icon { width: 34px; height: 34px; object-fit: cover; display: block; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-icon { transform: rotate(90deg); transition: transform .18s ease; }
