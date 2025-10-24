@@ -16,9 +16,6 @@
             <img src="{% static 'store/images/golf_club_icon.jpg' %}" alt="Menu" class="nav-toggle-icon">
         </button>
         <div class="nav-left">
-            <a class="brand" href="{% url 'homepage' %}" aria-label="Home">
-                <img src="{% static 'store/images/golf_club_icon.jpg' %}" alt="The Clubhouse" class="site-icon">
-            </a>
             <a href="{% url 'homepage' %}">Home</a>
             <a href="{% url 'product_category' 'driver' %}">Drivers</a>
             <a href="{% url 'product_category' 'wood' %}">Woods</a>
