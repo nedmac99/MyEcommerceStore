@@ -1,6 +1,7 @@
 {% extends "store/base.html" %}
+{% load static %}
 
-{% block title %}Golf Store - Home{% endblock %}
+{% block title %}The Clubhouse - Home{% endblock %}
 
 {% block content %}
     <h1>Welcome to The Clubhouse</h1>
@@ -24,4 +25,12 @@
             {% endfor %}
         </div>
     {% endfor %}
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="{% static 'store/js/homepage.js' %}" defer></script>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'store/css/homepage.css' %}">
 {% endblock %}

@@ -1,4 +1,5 @@
 {% extends 'store/base.html' %}
+{% load static %}
 
 {% block title %}{{ product.name }}{% endblock %}
 
@@ -15,4 +16,12 @@
     {% else %}
         <p><a href="/admin/login/">Login to add to cart</a></p>
     {% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="{% static 'store/js/product.js' %}" defer></script>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'store/css/product.css' %}">
 {% endblock %}

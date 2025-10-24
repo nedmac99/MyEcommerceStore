@@ -2,53 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Golf Store{% endblock %}</title>
-    <style>
-       /* * { margin: 0; padding: 0; border: 2px solid red;} */
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        nav a { margin-right: 10px; text-decoration: none; color: #333; }
-        nav a:hover { text-decoration: underline; }
-        .products { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
-        .product-card { border: 1px solid #ccc; padding: 10px; width: 200px; }
-        .product-card img { width: 100%; }
-        .product-card h2 { font-size: 18px; margin: 10px 0 5px; }
-        .product-card p { margin: 5px 0; }
-        /* Cart link styles */
-        .cart-link { float: right; display: inline-flex; align-items: center; gap: 8px; color: #333; text-decoration: none; }
-        .cart-link svg { width: 20px; height: 20px; fill: none; stroke: #333; stroke-width: 1.5; }
-    .cart-badge { background: #e60023; color: white; border-radius: 999px; padding: 2px 7px; font-size: 12px; font-weight: 600; }
-    .cart-text { float: right; margin-right: 8px; color: #333; text-decoration: none; font-weight: 600; }
-    </style>
+    <title>{% block title %}The Clubhouse{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'store/css/base.css' %}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
 
     <!-- Navigation -->
-    <nav>
-        <a href="{% url 'homepage' %}">Home</a>
-        <a href="{% url 'product_category' 'driver' %}">Drivers</a>
-        <a href="{% url 'product_category' 'wood' %}">Woods</a>
-        <a href="{% url 'product_category' 'hybrid' %}">Hybrids</a>
-        <a href="{% url 'product_category' 'iron' %}">Irons</a>
-        <a href="{% url 'product_category' 'wedge' %}">Wedges</a>
-        <a href="{% url 'product_category' 'putter' %}">Putters</a>
-        <a class="cart-link" href="{% url 'cart' %}" aria-label="View cart">
-            <!-- simple cart SVG -->
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="10" cy="20" r="1.5" />
-                <circle cx="18" cy="20" r="1.5" />
-            </svg>
-            <span class="cart-badge">{{ cart_item_count }}</span>
-        </a>
-        <a class="cart-text" href="{% url 'cart' %}">My Cart</a>
+    <nav class="main-nav">
+        <div class="nav-left">
+            <a href="{% url 'homepage' %}">Home</a>
+            <a href="{% url 'product_category' 'driver' %}">Drivers</a>
+            <a href="{% url 'product_category' 'wood' %}">Woods</a>
+            <a href="{% url 'product_category' 'hybrid' %}">Hybrids</a>
+            <a href="{% url 'product_category' 'iron' %}">Irons</a>
+            <a href="{% url 'product_category' 'wedge' %}">Wedges</a>
+            <a href="{% url 'product_category' 'putter' %}">Putters</a>
+        </div>
+        <div class="nav-right">
+            <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+            <a class="cart-link" href="{% url 'cart' %}" aria-label="View cart">
+                <!-- simple cart SVG -->
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M3 3h2l.4 2M7 13h10l4-8H5.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="10" cy="20" r="1.5" />
+                    <circle cx="18" cy="20" r="1.5" />
+                </svg>
+                <span class="cart-badge">{{ cart_item_count }}</span>
+            </a>
+            <a class="cart-text" href="{% url 'cart' %}">My Cart</a>
+        </div>
     </nav>
 
-    <style>
-        /* hide cart text on small screens */
-        @media (max-width: 600px) {
-            .cart-text { display: none; }
-        }
-    </style>
+    
 
     <!-- Page Content -->
     {% block content %}{% endblock %}
@@ -56,123 +43,11 @@
     <!-- Toast container -->
     <div id="toast-container" aria-live="polite" style="position:fixed;top:16px;right:16px;z-index:9999;"></div>
 
-    <script>
-    // CSRF helper
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
+    <script src="{% static 'store/js/global.js' %}" defer></script>
 
-    function showToast(message, timeout=3000) {
-        const container = document.getElementById('toast-container');
-        if (!container) return;
-        const el = document.createElement('div');
-        el.className = 'toast';
-        el.textContent = message;
-        el.style.background = '#333';
-        el.style.color = '#fff';
-        el.style.padding = '8px 12px';
-        el.style.borderRadius = '4px';
-        el.style.marginBottom = '8px';
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(-6px)';
-        el.style.transition = 'opacity .2s, transform .2s';
-        container.appendChild(el);
-        requestAnimationFrame(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; });
-        setTimeout(() => {
-            el.style.opacity = '0'; el.style.transform = 'translateY(-6px)';
-            setTimeout(() => el.remove(), 250);
-        }, timeout);
-    }
+    {% block extra_scripts %}{% endblock %}
 
-    document.addEventListener('DOMContentLoaded', function(){
-        const csrftoken = getCookie('csrftoken');
-        document.querySelectorAll('.remove-form, .remove-all-form').forEach(function(form){
-            form.addEventListener('submit', function(e){
-                e.preventDefault();
-                const isRemoveAll = form.classList.contains('remove-all-form');
-                const confirmMsg = isRemoveAll ? 'Are you sure you want to remove ALL units of this item from your cart?' : 'Are you sure you want to remove one unit of this item from your cart?';
-                if (!confirm(confirmMsg)) return;
-                const action = form.getAttribute('action');
-                fetch(action, {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRFToken': csrftoken,
-                        'Accept': 'application/json'
-                    },
-                    body: new FormData(form)
-                }).then(function(response){
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return response.json();
-                }).then(function(data){
-                    if (data.error) { showToast('Error: '+data.error); return; }
-                    // Update cart badge(s)
-                    document.querySelectorAll('.cart-badge').forEach(function(el){ el.textContent = data.cart_item_count; });
-                    // Update order total
-                    const totalEl = document.getElementById('order-total');
-                    if (totalEl && data.order_total !== undefined) totalEl.textContent = data.order_total;
-                    // Update item quantity or remove row
-                    const itemRow = document.getElementById('cart-item-' + data.product_id);
-                    if (itemRow) {
-                        if (data.item_quantity > 0) {
-                            const qty = itemRow.querySelector('.item-qty'); if (qty) qty.textContent = data.item_quantity;
-                        } else {
-                            itemRow.remove();
-                        }
-                    }
-                    showToast(isRemoveAll ? 'Item removed' : 'Cart updated');
-                }).catch(function(err){
-                    console.error(err);
-                    showToast('Could not update cart');
-                });
-            });
-        });
-        // Handle add-to-cart forms via AJAX to avoid redirecting the page
-        document.querySelectorAll('.add-to-cart-form').forEach(function(form){
-            form.addEventListener('submit', function(e){
-                e.preventDefault();
-                const action = form.getAttribute('action');
-                fetch(action, {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRFToken': csrftoken,
-                        'Accept': 'application/json'
-                    },
-                    body: new FormData(form)
-                }).then(function(response){
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return response.json();
-                }).then(function(data){
-                    if (data.error) { showToast('Error: '+data.error); return; }
-                    // Update cart badge(s)
-                    document.querySelectorAll('.cart-badge').forEach(function(el){ el.textContent = data.cart_item_count; });
-                    // Optionally update order total if present on page
-                    const totalEl = document.getElementById('order-total');
-                    if (totalEl && data.order_total !== undefined) totalEl.textContent = data.order_total;
-                    // Show confirmation toast with product name
-                    if (data.product_name) showToast(data.product_name + ' added to cart');
-                    else showToast('Added to cart');
-                }).catch(function(err){
-                    console.error(err);
-                    showToast('Could not add to cart');
-                });
-            });
-        });
-    });
-    </script>
+    <script src="{% static 'store/js/base-fallback.js' %}" defer></script>
 
 </body>
 </html>

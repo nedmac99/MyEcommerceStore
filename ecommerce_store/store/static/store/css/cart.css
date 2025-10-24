@@ -1,0 +1,4 @@
+/* Cart page specific styles */
+.remove-btn, .remove-all-btn { background: none; border: none; color: #c00; cursor: pointer; }
+.remove-all-btn { color: #900; }
+#order-total { font-weight: 700; }

@@ -1,0 +1,4 @@
+/* Product page specific styles */
+.product-page { max-width: 900px; margin: 0 auto; }
+.add-to-cart-form button { background: #0074d9; color: #fff; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+.add-to-cart-form button[disabled] { opacity: .6; cursor: not-allowed; }
