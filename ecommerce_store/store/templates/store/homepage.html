@@ -9,7 +9,7 @@
     <h2>Featured clubs</h2>
 
     {% for cat_name, cat_products in featured_products.items %}
-        <h2>{{ cat_name|capfirst }}</h2>
+    <h2>{{ cat_name|capfirst|add:"s" }}</h2>
         <div class="products">
             {% for product in cat_products %}
                 <div class="product-card">
