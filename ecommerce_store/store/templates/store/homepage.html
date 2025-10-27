@@ -17,8 +17,8 @@
                         <img src="{{ product.image.url }}" alt="{{ product.name }}">
                     </a>
                     <h2><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h2>
-                    <p>{{ product.description }}</p>
                     <p><strong>${{ product.price }}</strong></p>
+                    <p>{{ product.description }}</p>
                 </div>
             {% empty %}
                 <p>No products in this category yet.</p>
