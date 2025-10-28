@@ -13,7 +13,9 @@
 	opacity: 0;
 	overflow: hidden;
 	transform: translateY(-6px);
-	transition: max-height .32s ease, opacity .22s ease, transform .22s ease;
+	/* slow the expansion for a gentler, more noticeable reveal */
+	/* slightly slower initial reveal: longer fade & slide durations */
+	transition: max-height .6s cubic-bezier(.2,.8,.2,1), opacity .5s ease, transform .7s cubic-bezier(.2,.8,.2,1);
 	/* ensure block-level layout for max-height calculations */
 	display: block;
 }
@@ -24,6 +26,9 @@
 	max-height: 1000px; /* increase cap so long descriptions are not cut off */
 	opacity: 1;
 	transform: translateY(0);
+	/* make the collapse quicker by using shorter transition durations while hovered
+	   (the active transition duration used when leaving hover will be this value) */
+	transition: max-height .28s ease, opacity .18s ease, transform .18s ease;
 }
 
 /* If you prefer the content to collapse instead of reserve space, change to display:none */

@@ -43,7 +43,8 @@
             opacity: 0 !important;
             overflow: hidden !important;
             transform: translateY(-6px) !important;
-            transition: max-height .32s ease, opacity .22s ease, transform .22s ease !important;
+            /* slightly slower initial reveal: longer fade & slide durations */
+            transition: max-height .6s cubic-bezier(.2,.8,.2,1), opacity .5s ease, transform .7s cubic-bezier(.2,.8,.2,1) !important;
             display: block !important;
         }
         /* Reveal on hover (inline fallback) */
@@ -52,6 +53,8 @@
             max-height: 1000px !important;
             opacity: 1 !important;
             transform: translateY(0) !important;
+            /* shorter transitions while hovered so collapse is quicker */
+            transition: max-height .28s ease, opacity .18s ease, transform .18s ease !important;
         }
     </style>
 {% endblock %}
