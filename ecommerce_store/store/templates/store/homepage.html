@@ -35,6 +35,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'store/css/homepage.css' %}">
+{% endblock %}
     <style>
         /* Inline fallback: collapse content but allow a smooth reveal even if external CSS is cached */
         .homepage .product-card .product-price,
@@ -57,4 +58,3 @@
             transition: max-height .28s ease, opacity .18s ease, transform .18s ease !important;
         }
     </style>
-{% endblock %}
