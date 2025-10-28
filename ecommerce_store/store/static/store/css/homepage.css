@@ -2,5 +2,28 @@
 .featured-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
 .products { gap: 16px; }
 
-/* Hide the global brand icon on the homepage per user request */
+/* Hide the global brand icon on the homepage (if present) */
 .brand { display: none !important; }
+
+/* Hide price/description and remove them from flow on the homepage */
+.homepage .product-card .product-price,
+.homepage .product-card .product-description {
+	/* collapse visually but keep element measurable for smooth transition */
+	max-height: 0;
+	opacity: 0;
+	overflow: hidden;
+	transform: translateY(-6px);
+	transition: max-height .32s ease, opacity .22s ease, transform .22s ease;
+	/* ensure block-level layout for max-height calculations */
+	display: block;
+}
+
+/* Reveal on hover (external stylesheet version) with a gentle slide+fade */
+.homepage .product-card:hover .product-price,
+.homepage .product-card:hover .product-description {
+	max-height: 1000px; /* increase cap so long descriptions are not cut off */
+	opacity: 1;
+	transform: translateY(0);
+}
+
+/* If you prefer the content to collapse instead of reserve space, change to display:none */

@@ -4,27 +4,29 @@
 {% block title %}The Clubhouse - Home{% endblock %}
 
 {% block content %}
-    <h1>Welcome to The Clubhouse</h1>
-    <p>Browse our collection of golf clubs by category.</p>
-    <h2>Featured clubs</h2>
+    <div class="homepage">
+        <h1>Welcome to The Clubhouse</h1>
+        <p>Browse our collection of golf clubs by category.</p>
+        <h2>Featured clubs</h2>
 
-    {% for cat_name, cat_products in featured_products.items %}
-    <h2>{{ cat_name|capfirst|add:"s" }}</h2>
-        <div class="products">
-            {% for product in cat_products %}
-                <div class="product-card">
-                    <a href="{% url 'product_category' cat_name %}">
-                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                    </a>
-                    <h2><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h2>
-                    <p><strong>${{ product.price }}</strong></p>
-                    <p>{{ product.description }}</p>
-                </div>
-            {% empty %}
-                <p>No products in this category yet.</p>
-            {% endfor %}
-        </div>
-    {% endfor %}
+        {% for cat_name, cat_products in featured_products.items %}
+            <h2>{{ cat_name|capfirst|add:"s" }}</h2>
+            <div class="products">
+                {% for product in cat_products %}
+                    <div class="product-card">
+                        <a href="{% url 'product_category' cat_name %}">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        </a>
+                        <h2><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h2>
+                        <p class="product-price"><strong>${{ product.price }}</strong></p>
+                        <p class="product-description">{{ product.description }}</p>
+                    </div>
+                {% empty %}
+                    <p>No products in this category yet.</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
 
 {% block extra_scripts %}
@@ -33,4 +35,23 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'store/css/homepage.css' %}">
+    <style>
+        /* Inline fallback: collapse content but allow a smooth reveal even if external CSS is cached */
+        .homepage .product-card .product-price,
+        .homepage .product-card .product-description {
+            max-height: 0 !important;
+            opacity: 0 !important;
+            overflow: hidden !important;
+            transform: translateY(-6px) !important;
+            transition: max-height .32s ease, opacity .22s ease, transform .22s ease !important;
+            display: block !important;
+        }
+        /* Reveal on hover (inline fallback) */
+        .homepage .product-card:hover .product-price,
+        .homepage .product-card:hover .product-description {
+            max-height: 1000px !important;
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+    </style>
 {% endblock %}
