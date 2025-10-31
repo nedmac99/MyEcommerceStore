@@ -1,7 +1,7 @@
 /* Base styles extracted from templates/base.html */
 /* General layout and typography */
-* { box-sizing: border-box; }
-body { font-family: Arial, sans-serif; padding: 20px; }
+* { box-sizing: border-box; border: 2px solid red;}
+body { font-family: Arial, sans-serif; padding: 20px; border: 2px solid blue; }
 nav a { margin-right: 10px; text-decoration: none; color: #333; }
 nav a:hover { text-decoration: underline; }
 .products { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
@@ -10,9 +10,7 @@ nav a:hover { text-decoration: underline; }
 .product-card h2 { font-size: 18px; margin: 10px 0 5px; }
 .product-card p { margin: 5px 0; }
 
-/* Nav layout using flexbox for better responsive behavior */
-/* Desktop/wide layout: keep cart on the same line and let categories scroll if needed */
-.main-nav { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; position: relative; }
+.main-nav { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; /* make the nav full-bleed */ position: fixed; top: 0; left: 0; right: 0; width: 100%; background: #527a56; color: #fff; z-index: 1002; box-shadow: 0 2px 6px rgba(0,0,0,0.06); padding: 12px 20px; margin: 0; }
 .nav-left { display: flex; gap: 10px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; }
 .nav-left a { text-decoration: none; color: #333; white-space: nowrap; }
 .nav-right { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; flex: 0 0 auto; }
@@ -27,7 +25,7 @@ nav a:hover { text-decoration: underline; }
 
 /* On small screens: hide links by default and use the hamburger */
 @media (max-width: 600px) {
-    .main-nav { flex-direction: column; align-items: stretch; padding-top: 88px; background: white; }
+    .main-nav { flex-direction: column; align-items: stretch; padding-top: 12px; background: #527a56; }
     /* Absolutely position the cart area so it stays top-right and doesn't flow under stacked links */
     .nav-right { position: absolute; top: 12px; right: 12px; margin-left: 0; z-index: 1000; background: transparent; }
     /* Position the toggle on the left so it remains visible when nav-left is hidden */
@@ -40,11 +38,23 @@ nav a:hover { text-decoration: underline; }
     .nav-toggle { display: inline-flex; align-items: center; justify-content: center; padding: 6px; }
     /* give the cart area a little padding so icon/badge don't overlap stacked links */
     .nav-right a.cart-link { padding: 6px; background: rgba(255,255,255,0.9); border-radius: 6px; }
-    .cart-text { display: none; }
+    .cart-text { display: none; color: #fff;}
 }
 
 /* Small utility: toast container default styles (JS may inject/override) */
 #toast-container .toast { background: #222; color: #fff; padding: 10px 14px; border-radius: 6px; margin-bottom: 10px; opacity: .98; }
+
+/* Decorative background band for the nav — fixed so it can extend full-bleed */
+#nav-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px; /* JS will override with computed value */
+    background: #527a56;
+    z-index: 1000; /* below the nav but above page background */
+    transition: top .18s ease, height .18s ease;
+}
 
 /* Site brand icon used in the header/nav */
 .site-icon { width: 32px; height: 32px; object-fit: cover; border-radius: 6px; display: inline-block; vertical-align: middle; }

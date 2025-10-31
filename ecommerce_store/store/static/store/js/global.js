@@ -40,6 +40,21 @@ function showToast(message, timeout=3000) {
     }, timeout);
 }
 
+// Keep the page content below the fixed nav by exposing a helper that sets
+// a CSS variable `--nav-height` to the measured nav height. This is called
+// on load, after toggles, and on resize so the H1/content won't be covered.
+function updateNavHeight(){
+    const nav = document.querySelector('.main-nav');
+    if (!nav) return;
+    // measure the nav (including any expanded menu) and set a CSS variable
+    // so CSS can apply the same spacing to the page content.
+    const natural = nav.scrollHeight || nav.offsetHeight || 64;
+    // clamp to a reasonable max (80vh) so nav doesn't push content excessively
+    const max = Math.floor(window.innerHeight * 0.8);
+    const final = Math.max(48, Math.min(natural, max));
+    document.documentElement.style.setProperty('--nav-height', final + 'px');
+}
+
 // Mobile nav toggle
 document.addEventListener('DOMContentLoaded', function(){
     const navToggle = document.querySelector('.nav-toggle');
@@ -68,6 +83,10 @@ document.addEventListener('DOMContentLoaded', function(){
                     if (!mainNav.classList.contains('nav-open')) navLeft.style.display = 'none';
                 }, 300);
             }
+            // update nav height immediately and after the toggle animation so
+            // the page padding follows the nav size and prevents overlap.
+            try { updateNavHeight(); } catch(e){}
+            setTimeout(function(){ try { updateNavHeight(); } catch(e){} }, 360);
         });
     }
     // click-outside to close when nav is open
@@ -162,9 +181,18 @@ function adjustNavToggle() {
 let _navResizeTimer = null;
 window.addEventListener('resize', function(){
     if (_navResizeTimer) clearTimeout(_navResizeTimer);
-    _navResizeTimer = setTimeout(adjustNavToggle, 120);
+    _navResizeTimer = setTimeout(function(){
+        try { adjustNavToggle(); } catch(e){}
+        try { updateNavHeight(); } catch(e){}
+    }, 120);
 });
 document.addEventListener('DOMContentLoaded', function(){
     // run after a small timeout to allow fonts/layout
-    setTimeout(adjustNavToggle, 50);
+    setTimeout(function(){ try { adjustNavToggle(); } catch(e){}; try { updateNavHeight(); } catch(e){} }, 50);
+});
+
+// Also run on full load to ensure images/fonts that affect layout are accounted for
+window.addEventListener('load', function(){
+    try { adjustNavToggle(); } catch(e){}
+    try { updateNavHeight(); } catch(e){}
 });
