@@ -4,7 +4,7 @@
 body { font-family: Arial, sans-serif; padding: 20px;
     /* page background: use divots image as a single continuous background
        (no tiling). Use cover to scale the image to fill the viewport. */
-    background-image: url('/media/products/divots_background.jpg');
+    background-image: url('/media/products/divots_background.jpg'); /*Or golf cart?*/
     /*background-repeat: no-repeat;*/
     background-repeat: repeat;
     background-position: center top;
