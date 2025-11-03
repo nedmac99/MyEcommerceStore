@@ -26,12 +26,12 @@
             <a href="{% url 'product_category' 'putter' %}">Putters</a>
         </div>
         <div class="nav-right">
+            <a class="cart-text" href="{% url 'cart' %}">My Cart</a>
             <a class="cart-link" href="{% url 'cart' %}" aria-label="View cart">
                 <!-- golf flag icon instead of cart SVG -->
-                <img src="{% static 'store/images/golf-flag-icon-removebg-preview.png' %}" alt="Cart" class="cart-icon" />
                 <span class="cart-badge">{{ cart_item_count }}</span>
+                <img src="{% static 'store/images/golf-flag-icon-removebg-preview.png' %}" alt="Cart" class="cart-icon" />
             </a>
-            <a class="cart-text" href="{% url 'cart' %}">My Cart</a>
         </div>
     </nav>
     </div>
