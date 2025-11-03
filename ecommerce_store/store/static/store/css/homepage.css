@@ -1,9 +1,10 @@
 /* Homepage specific styles */
 .featured-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
-.products { gap: 16px; }
+.products { gap: 16px; background: #C2B280; border-radius: 12px;}
 
 /* Hide the global brand icon on the homepage (if present) */
 .brand { display: none !important; }
+
 
 /* Hide price/description and remove them from flow on the homepage */
 .homepage .product-card .product-price,
