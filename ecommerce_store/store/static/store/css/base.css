@@ -1,7 +1,18 @@
 /* Base styles extracted from templates/base.html */
 /* General layout and typography */
-* { box-sizing: border-box; border: 2px solid red;}
-body { font-family: Arial, sans-serif; padding: 20px; border: 2px solid blue; }
+* { box-sizing: border-box; }
+body { font-family: Arial, sans-serif; padding: 20px;
+    /* page background: use divots image as a single continuous background
+       (no tiling). Use cover to scale the image to fill the viewport. */
+    background-image: url('/media/products/divots_background.jpg');
+    /*background-repeat: no-repeat;*/
+    background-repeat: repeat;
+    background-position: center top;
+    background-attachment: fixed;
+    /* subtle fallback color while image loads */
+    /*background-size: cover;*/
+    background-color: #f4f6f2;
+}
 nav a { margin-right: 10px; text-decoration: none; color: #333; }
 nav a:hover { text-decoration: underline; }
 .products { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
@@ -10,15 +21,20 @@ nav a:hover { text-decoration: underline; }
 .product-card h2 { font-size: 18px; margin: 10px 0 5px; }
 .product-card p { margin: 5px 0; }
 
-.main-nav { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; /* make the nav full-bleed */ position: fixed; top: 0; left: 0; right: 0; width: 100%; background: #527a56; color: #fff; z-index: 1002; box-shadow: 0 2px 6px rgba(0,0,0,0.06); padding: 12px 20px; margin: 0; }
+.nav-container{
+    width: 100%;
+}
+
+.main-nav { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; /* make the nav full-bleed */ /* position: fixed; */ top: 0; left: 0; right: 0; width: 100%; background: #527a56; color: #fff; z-index: 1002; box-shadow: 0 2px 6px rgba(0,0,0,0.06); padding: 12px 20px; margin: 0; border-radius: 10px;}
 .nav-left { display: flex; gap: 10px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; }
-.nav-left a { text-decoration: none; color: #333; white-space: nowrap; }
+.nav-left a { text-decoration: none; color: #fff; white-space: nowrap; }
 .nav-right { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; flex: 0 0 auto; }
 .nav-toggle { display: none; background: none; border: none; font-size: 20px; cursor: pointer; }
 .cart-link { display: inline-flex; align-items: center; gap: 8px; color: #333; text-decoration: none; }
 .cart-link svg { width: 20px; height: 20px; fill: none; stroke: #333; stroke-width: 1.5; }
 .cart-badge { background: #e60023; color: white; border-radius: 999px; padding: 2px 7px; font-size: 12px; font-weight: 600; }
-.cart-text { margin-left: 4px; color: #333; text-decoration: none; font-weight: 600; }
+.cart-icon { width: 50px; height: 50px; object-fit: contain; display: inline-block; }
+.cart-text { margin-left: 4px; color: #fff; text-decoration: none; font-weight: 600; }
 /* collapse/slide styles applied only when nav-left is made collapsible */
 .nav-left.collapsible { overflow: hidden; max-height: 0; opacity: 0; transition: max-height .28s ease, opacity .2s; }
 .main-nav.nav-open .nav-left.collapsible { max-height: 1000px; opacity: 1; }
@@ -62,6 +78,6 @@ nav a:hover { text-decoration: underline; }
 
 /* Use the golf club image as the hamburger/menu icon */
 .nav-toggle { background: transparent; border: none; padding: 0; cursor: pointer; }
-.nav-toggle { background: transparent; border: none; padding: 2px; cursor: pointer; }
-.nav-toggle-icon { width: 34px; height: 34px; object-fit: cover; display: block; }
+.nav-toggle { background: transparent; border: none; padding: 2px; cursor: pointer; overflow: hidden; border-radius: 10px; }
+.nav-toggle-icon { width: 34px; height: 34px; object-fit: cover; display: block; border-radius: 10px; }
 .nav-toggle[aria-expanded="true"] .nav-toggle-icon { transform: rotate(90deg); transition: transform .18s ease; }

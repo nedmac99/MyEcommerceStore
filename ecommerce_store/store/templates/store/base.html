@@ -11,6 +11,7 @@
 <body>
 
     <!-- Navigation -->
+    <div class="nav-container">
     <nav class="main-nav">
         <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
             <img src="{% static 'store/images/golf_club_icon.jpg' %}" alt="Menu" class="nav-toggle-icon">
@@ -26,17 +27,14 @@
         </div>
         <div class="nav-right">
             <a class="cart-link" href="{% url 'cart' %}" aria-label="View cart">
-                <!-- simple cart SVG -->
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M3 3h2l.4 2M7 13h10l4-8H5.4" stroke-linecap="round" stroke-linejoin="round"/>
-                    <circle cx="10" cy="20" r="1.5" />
-                    <circle cx="18" cy="20" r="1.5" />
-                </svg>
+                <!-- golf flag icon instead of cart SVG -->
+                <img src="{% static 'store/images/golf-flag-icon-removebg-preview.png' %}" alt="Cart" class="cart-icon" />
                 <span class="cart-badge">{{ cart_item_count }}</span>
             </a>
             <a class="cart-text" href="{% url 'cart' %}">My Cart</a>
         </div>
     </nav>
+    </div>
 
     
 
