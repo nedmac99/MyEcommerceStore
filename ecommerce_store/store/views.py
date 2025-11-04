@@ -15,6 +15,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.utils import timezone
 
 
 def homepage(request):
@@ -194,7 +195,17 @@ def create_checkout_session(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-    return JsonResponse({'id': session.id, 'url': getattr(session, 'url', None)})
+    # Save the session id to the order so we have a record and can reconcile later
+    try:
+        order.stripe_session_id = getattr(session, 'id', None)
+        # ensure total_price saved (in case JS changes occurred)
+        order.total_price = sum(i.product.price * i.quantity for i in order.items.all())
+        order.save()
+    except Exception:
+        # non-fatal; continue returning session info
+        pass
+
+    return JsonResponse({'id': getattr(session, 'id', None), 'url': getattr(session, 'url', None)})
 
 
 @csrf_exempt
@@ -225,7 +236,18 @@ def stripe_webhook(request):
             try:
                 order = Order.objects.get(id=order_id)
                 if order.status != 'Completed':
+                    # record payment/session identifiers and mark completed
+                    # attempt to pull payment intent / session id from the event data
+                    sess_id = data.get('id') or data.get('session_id') or None
+                    if sess_id and not order.stripe_session_id:
+                        order.stripe_session_id = sess_id
+
+                    payment_intent = data.get('payment_intent') or data.get('payment_intent_id') or None
+                    if payment_intent:
+                        order.payment_intent_id = payment_intent
+
                     order.status = 'Completed'
+                    order.paid_at = timezone.now()
                     order.save()
             except Order.DoesNotExist:
                 pass
@@ -235,6 +257,38 @@ def stripe_webhook(request):
 
 def checkout_success(request):
     # Stripe will redirect here after payment. The template can read session_id from query params.
+    session_id = request.GET.get('session_id')
+
+    # If we have a session_id and Stripe is available, retrieve it to reconcile the order.
+    if session_id and settings.STRIPE_SECRET_KEY and stripe is not None:
+        try:
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            # expand payment_intent so we can capture its id if present
+            sess = stripe.checkout.Session.retrieve(session_id, expand=['payment_intent'])
+            metadata = getattr(sess, 'metadata', {}) or {}
+            order_id = metadata.get('order_id')
+            payment_intent = getattr(sess, 'payment_intent', None)
+
+            if order_id:
+                try:
+                    order = Order.objects.get(id=order_id)
+                    if order.status != 'Completed':
+                        order.stripe_session_id = sess.id
+                        if payment_intent:
+                            # payment_intent may be an id string or object depending on expand
+                            if isinstance(payment_intent, str):
+                                order.payment_intent_id = payment_intent
+                            else:
+                                order.payment_intent_id = getattr(payment_intent, 'id', None)
+                        order.status = 'Completed'
+                        order.paid_at = timezone.now()
+                        order.save()
+                except Order.DoesNotExist:
+                    pass
+        except Exception:
+            # Don't raise for user-facing redirect failures; webhook should reconcile later.
+            pass
+
     return render(request, 'store/checkout_success.html')
 
 

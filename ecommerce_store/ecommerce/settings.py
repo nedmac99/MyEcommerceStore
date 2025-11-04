@@ -128,6 +128,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Stripe keys (use env vars in production). Empty by default so UI can disable Pay.
 import os
+
+#Get the keys from my stripe dashboard
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
 STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY', '')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
