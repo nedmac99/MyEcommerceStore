@@ -1,17 +1,60 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
     <title>Checkout</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="{% static 'store/css/base.css' %}">
+    <style>
+        .checkout-summary { max-width:800px; margin:24px auto; padding:16px; }
+        table { width:100%; border-collapse:collapse; }
+        th, td { padding:8px; border-bottom:1px solid #eee; text-align:left }
+        .total-row { font-weight:700; }
+        .pay-btn { background:#6772e5; color:#fff; border:none; padding:10px 16px; border-radius:6px; cursor:pointer }
+        .pay-btn[disabled] { opacity:0.6; cursor:not-allowed }
+    </style>
 </head>
 <body>
-<h1>Checkout</h1>
+<div class="checkout-summary">
+    <h1>Checkout</h1>
 
-{% if order %}
-    <p>Thank you, {{ request.user.username }}! Your order of ${{ order.total_price }} has been completed.</p>
-{% else %}
-    <p>No order to checkout.</p>
-{% endif %}
+    {% if order and order.items.count > 0 %}
+        <table aria-label="Order summary">
+            <thead>
+                <tr><th>Product</th><th>Qty</th><th>Unit</th><th>Subtotal</th></tr>
+            </thead>
+            <tbody>
+            {% for item in order.items.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ item.product.price }}</td>
+                    <td>${{ item.product.price|floatformat:2|add:'0'|floatformat:2|floatformat }}{{ "" }}{{ item.quantity|floatformat:0 }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="total-row"><td colspan="3">Total</td><td>${{ order.total_price }}</td></tr>
+            </tfoot>
+        </table>
 
-<a href="{% url 'home' %}">Back to Home</a>
+        <div style="margin-top:16px">
+            {% if stripe_configured %}
+                <button id="payBtn" class="pay-btn" data-create-url="{% url 'create_checkout_session' %}">Pay with Card (Stripe)</button>
+            {% else %}
+                <button id="payBtn" class="pay-btn" disabled data-create-url="{% url 'create_checkout_session' %}">Pay with Card (Stripe)</button>
+                <p style="color:#b33;">Stripe is not configured on the server. Set STRIPE_SECRET_KEY to enable payments.</p>
+            {% endif %}
+            <a style="margin-left:12px" href="{% url 'cart' %}">Edit cart</a>
+        </div>
+    {% else %}
+        <p>No order to checkout. <a href="{% url 'homepage' %}">Continue shopping</a>.</p>
+    {% endif %}
+
+    <p style="margin-top:18px"><a href="{% url 'homepage' %}">Back to Home</a></p>
+</div>
+
+<script src="{% static 'store/js/checkout.js' %}"></script>
 </body>
 </html>

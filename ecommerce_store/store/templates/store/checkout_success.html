@@ -1,0 +1,16 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Payment Successful</title>
+    <link rel="stylesheet" href="{% static 'store/css/base.css' %}">
+</head>
+<body>
+<div style="max-width:700px;margin:40px auto;padding:20px">
+    <h1>Payment successful</h1>
+    <p>Thank you — your payment was successful. You should receive an email confirmation shortly.</p>
+    <p><a href="{% url 'homepage' %}">Back to Home</a></p>
+</div>
+</body>
+</html>
