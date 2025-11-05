@@ -3,7 +3,7 @@
 /* Enable smooth in-page scrolling for anchor links */
 html { scroll-behavior: smooth; }
 
-* { box-sizing: border-box; border: 2px solid red;}
+* { box-sizing: border-box }
 body { font-family: Arial, sans-serif; padding: 20px;
     /* page background: use divots image as a single continuous background
        (no tiling). Use cover to scale the image to fill the viewport. */
