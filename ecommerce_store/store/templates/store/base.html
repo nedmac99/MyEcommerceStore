@@ -13,18 +13,29 @@
     <!-- Navigation -->
     <div class="nav-container">
     <nav class="main-nav">
+        <!-- Brand: clicking the club icon goes to homepage (not a hamburger) -->
+        <a href="{% url 'homepage' %}" class="brand-link" aria-label="Homepage">
+            <img src="{% static 'store/images/golf_club_icon.jpg' %}" alt="Refurbished Golf" class="brand-icon">
+        </a>
+
+        <!-- Hamburger toggle kept for small screens: preserved class so global.js still finds it -->
         <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-            <img src="{% static 'store/images/golf_club_icon.jpg' %}" alt="Menu" class="nav-toggle-icon">
+            <span class="hamburger" aria-hidden="true">☰</span>
         </button>
-        <div class="nav-left">
-            <a href="{% url 'homepage' %}">Home</a>
-            <a href="{% url 'product_category' 'driver' %}">Drivers</a>
-            <a href="{% url 'product_category' 'wood' %}">Woods</a>
-            <a href="{% url 'product_category' 'hybrid' %}">Hybrids</a>
-            <a href="{% url 'product_category' 'iron' %}">Irons</a>
-            <a href="{% url 'product_category' 'wedge' %}">Wedges</a>
-            <a href="{% url 'product_category' 'putter' %}">Putters</a>
-        </div>
+
+        
+            <div class="nav-item has-dropdown">
+                <a href="#" class="nav-link">Clubs <span class="caret">▾</span></a>
+                <div class="dropdown" aria-hidden="true">
+                    <a href="{% url 'product_category' 'driver' %}">Drivers</a>
+                    <a href="{% url 'product_category' 'wood' %}">Woods</a>
+                    <a href="{% url 'product_category' 'hybrid' %}">Hybrids</a>
+                    <a href="{% url 'product_category' 'iron' %}">Irons</a>
+                    <a href="{% url 'product_category' 'wedge' %}">Wedges</a>
+                    <a href="{% url 'product_category' 'putter' %}">Putters</a>
+                </div>
+            </div>
+        
         <div class="nav-right">
             <a class="cart-text" href="{% url 'cart' %}">My Cart</a>
             <a class="cart-link" href="{% url 'cart' %}" aria-label="View cart">

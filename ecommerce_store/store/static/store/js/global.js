@@ -106,6 +106,31 @@ document.addEventListener('DOMContentLoaded', function(){
         navLeft.style.opacity = '0';
         setTimeout(() => { if (!nav.classList.contains('nav-open')) navLeft.style.display = 'none'; }, 300);
     });
+
+    // Dropdown click behavior for small screens: allow tapping 'Clubs' to open the submenu
+    const dropdownToggles = document.querySelectorAll('.nav-item.has-dropdown > .nav-link');
+    if (dropdownToggles && dropdownToggles.length) {
+        dropdownToggles.forEach(function(toggle){
+            toggle.addEventListener('click', function(e){
+                // On desktop we rely on hover; on small screens intercept the click to toggle
+                if (window.innerWidth <= 600) {
+                    e.preventDefault();
+                    const parent = this.parentElement;
+                    const isOpen = parent.classList.contains('open');
+                    // close any other open dropdowns
+                    document.querySelectorAll('.nav-item.has-dropdown.open').forEach(function(el){
+                        if (el !== parent) el.classList.remove('open');
+                    });
+                    parent.classList.toggle('open', !isOpen);
+                    // update aria-hidden on the dropdown
+                    const dropdown = parent.querySelector('.dropdown');
+                    if (dropdown) dropdown.setAttribute('aria-hidden', String(isOpen));
+                    // update nav height after toggling
+                    try { updateNavHeight(); } catch(e){}
+                }
+            });
+        });
+    }
 });
 
 // Dynamic hamburger: show toggle when nav-left would overlap the cart on larger screens

@@ -1,6 +1,9 @@
 /* Base styles extracted from templates/base.html */
 /* General layout and typography */
-* { box-sizing: border-box; }
+/* Enable smooth in-page scrolling for anchor links */
+html { scroll-behavior: smooth; }
+
+* { box-sizing: border-box; border: 2px solid red;}
 body { font-family: Arial, sans-serif; padding: 20px;
     /* page background: use divots image as a single continuous background
        (no tiling). Use cover to scale the image to fill the viewport. */
@@ -23,6 +26,7 @@ nav a:hover { text-decoration: underline; }
 
 .nav-container{
     width: 100%;
+    position: sticky;
 }
 
 .main-nav { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; /* make the nav full-bleed */ /* position: fixed; */ top: 0; left: 0; right: 0; width: 100%; background: #527a56; color: #fff; z-index: 1002; box-shadow: 0 2px 6px rgba(0,0,0,0.06); padding: 12px 20px; margin: 0; border-radius: 10px;}
@@ -38,6 +42,9 @@ nav a:hover { text-decoration: underline; }
 /* collapse/slide styles applied only when nav-left is made collapsible */
 .nav-left.collapsible { overflow: hidden; max-height: 0; opacity: 0; transition: max-height .28s ease, opacity .2s; }
 .main-nav.nav-open .nav-left.collapsible { max-height: 1000px; opacity: 1; }
+/* When the collapsible nav is opened, allow overflow to be visible so
+    absolutely-positioned dropdowns (like the Clubs menu) are not clipped. */
+.main-nav.nav-open .nav-left.collapsible { overflow: visible; }
 
 /* On small screens: hide links by default and use the hamburger */
 @media (max-width: 600px) {
@@ -81,3 +88,80 @@ nav a:hover { text-decoration: underline; }
 .nav-toggle { background: transparent; border: none; padding: 2px; cursor: pointer; overflow: hidden; border-radius: 10px; }
 .nav-toggle-icon { width: 34px; height: 34px; object-fit: cover; display: block; border-radius: 10px; }
 .nav-toggle[aria-expanded="true"] .nav-toggle-icon { transform: rotate(90deg); transition: transform .18s ease; }
+
+/* Brand link styles */
+.brand-link { display:inline-flex; align-items:center; gap:8px; text-decoration:none; }
+.brand-icon { width:34px; height:34px; object-fit:cover; border-radius:10px; display:block; /* smooth hover/focus transition */ transition: transform .18s ease, filter .18s ease, box-shadow .18s ease; }
+
+/* Hover and keyboard-focus affordance for the brand icon: subtle lift, brighten and shadow */
+.brand-link:hover .brand-icon,
+.brand-link:focus .brand-icon,
+.brand-icon:focus-visible {
+    transform: translateY(-2px) scale(1.06);
+    filter: brightness(1.06) saturate(1.03);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* Clubs dropdown */
+.nav-item { position: relative; }
+.nav-item .nav-link { color: #fff; text-decoration: none; padding: 6px 8px; display:inline-flex; align-items:center; gap:6px; }
+.nav-item .caret { font-size: 12px; opacity: .9; }
+.nav-item .dropdown {
+    position: absolute;
+    /* sit flush below the trigger element to avoid pointer gaps */
+    top: 100%;
+    left: 0;
+    background: #fff;
+    color: #111;
+    min-width: 180px;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(11,12,15,0.08);
+    /* provide a small inner offset so the dropdown doesn't visually touch the trigger
+       while still ensuring there is no hover gap between trigger and dropdown */
+    padding: 10px 0 8px 0;
+    display: flex; /* absolute dropdown doesn't affect layout */
+    flex-direction: column;
+    z-index: 1200;
+    /* start hidden for desktop, animated via opacity/transform */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity .18s ease, transform .18s ease, visibility 0s linear .18s;
+    pointer-events: none;
+}
+.nav-item .dropdown a { color: #111; padding: 10px 14px; display:block; text-decoration:none; }
+.nav-item .dropdown a:hover { background: rgba(0,0,0,0.03); }
+
+/* show dropdown on hover for desktop with a tiny fade+slide */
+@media (min-width: 601px) {
+    .nav-item.has-dropdown:hover .dropdown {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0s;
+        pointer-events: auto;
+    }
+}
+
+/* on small screens, make dropdown part of the flow when nav-left is opened */
+@media (max-width: 600px) {
+    /* Mobile: keep dropdown part of the flow and toggle via display to avoid layout surprises */
+    .nav-item .dropdown { position: static; box-shadow: none; background: transparent; padding: 0; display: none; visibility: visible; opacity: 1; transform: none; pointer-events: auto; transition: none; }
+    .nav-item.open .dropdown { display: flex; flex-direction: column; }
+    .nav-item .dropdown a { padding-left: 12px; }
+}
+
+/* style hamburger glyph */
+.nav-toggle .hamburger { font-size: 20px; line-height: 1; color: #fff; }
+
+/* Ensure page content sits below the nav with a small visual gap.
+   Uses the --nav-height variable maintained by JS; falls back to 64px. */
+main, .page-content {
+    margin-top: 1%;
+}
+
+/* Ensure anchor targets (like #categories) don't get hidden behind the sticky nav.
+   Uses --nav-height if JS sets it; falls back to 64px. */
+#categories {
+    scroll-margin-top: calc(var(--nav-height, 64px) + 8px);
+}

@@ -4,29 +4,85 @@
 {% block title %}The Clubhouse - Home{% endblock %}
 
 {% block content %}
-    <div class="homepage">
-        <h1>Welcome to The Clubhouse</h1>
-        <p>Browse our collection of golf clubs by category.</p>
-        <h2>Featured clubs</h2>
-
-        {% for cat_name, cat_products in featured_products.items %}
-            <h2>{{ cat_name|capfirst|add:"s" }}</h2>
-            <div class="products">
-                {% for product in cat_products %}
-                    <div class="product-card">
-                        <a href="{% url 'product_category' cat_name %}">
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                        </a>
-                        <h2><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h2>
-                        <p class="product-price"><strong>${{ product.price }}</strong></p>
-                        <p class="product-description">{{ product.description }}</p>
-                    </div>
-                {% empty %}
-                    <p>No products in this category yet.</p>
-                {% endfor %}
+    <main class="homepage">
+        <section class="hero">
+            <div class="hero-inner container">
+                <div class="hero-copy">
+                    <h1 class="hero-title">QUALITY<br>REFURBISHED<br>GOLF CLUBS</h1>
+                    <p class="hero-sub">A better way to play</p>
+                    <a class="btn btn-primary hero-cta" href="#categories">SHOP NOW</a>
+                </div>
+                <div class="hero-image">
+                    {% comment %} Prefer a featured driver image if available, else fall back to a static image {% endcomment %}
+                    {% if featured_products.driver and featured_products.driver.0 %}
+                        <img src="{{ featured_products.driver.0.image.url }}" alt="Driver" loading="lazy">
+                    {% else %}
+                        <img src="{% static 'store/images/hero-driver.png' %}" alt="Driver" loading="lazy">
+                    {% endif %}
+                </div>
             </div>
-        {% endfor %}
-    </div>
+        </section>
+
+    <section id="categories" class="categories container">
+            <h2 class="section-title">SHOP BY CATEGORY</h2>
+            <div class="category-grid">
+                <!-- Order: drivers, woods, hybrids, irons, wedges, putters -->
+                <a class="category-card" href="{% url 'product_category' 'driver' %}">
+                    {% if featured_products.driver and featured_products.driver.0 %}
+                        <img src="{{ featured_products.driver.0.image.url }}" alt="Drivers">
+                    {% else %}
+                        <img src="{% static 'store/images/category-drivers.svg' %}" alt="Drivers">
+                    {% endif %}
+                    <span class="category-label">Drivers</span>
+                </a>
+
+                <a class="category-card" href="{% url 'product_category' 'wood' %}">
+                    {% if featured_products.wood and featured_products.wood.0 %}
+                        <img src="{{ featured_products.wood.0.image.url }}" alt="Woods">
+                    {% else %}
+                        <img src="{% static 'store/images/category-woods.svg' %}" alt="Woods">
+                    {% endif %}
+                    <span class="category-label">Woods</span>
+                </a>
+
+                <a class="category-card" href="{% url 'product_category' 'hybrid' %}">
+                    {% if featured_products.hybrid and featured_products.hybrid.0 %}
+                        <img src="{{ featured_products.hybrid.0.image.url }}" alt="Hybrids">
+                    {% else %}
+                        <img src="{% static 'store/images/category-hybrids.svg' %}" alt="Hybrids">
+                    {% endif %}
+                    <span class="category-label">Hybrids</span>
+                </a>
+
+                <a class="category-card" href="{% url 'product_category' 'iron' %}">
+                    {% if featured_products.iron and featured_products.iron.0 %}
+                        <img src="{{ featured_products.iron.0.image.url }}" alt="Irons">
+                    {% else %}
+                        <img src="{% static 'store/images/category-irons.svg' %}" alt="Irons">
+                    {% endif %}
+                    <span class="category-label">Irons</span>
+                </a>
+
+                <a class="category-card" href="{% url 'product_category' 'wedge' %}">
+                    {% if featured_products.wedge and featured_products.wedge.0 %}
+                        <img src="{{ featured_products.wedge.0.image.url }}" alt="Wedges">
+                    {% else %}
+                        <img src="{% static 'store/images/category-wedges.svg' %}" alt="Wedges">
+                    {% endif %}
+                    <span class="category-label">Wedges</span>
+                </a>
+
+                <a class="category-card" href="{% url 'product_category' 'putter' %}">
+                    {% if featured_products.putter and featured_products.putter.0 %}
+                        <img src="{{ featured_products.putter.0.image.url }}" alt="Putters">
+                    {% else %}
+                        <img src="{% static 'store/images/category-putters.svg' %}" alt="Putters">
+                    {% endif %}
+                    <span class="category-label">Putters</span>
+                </a>
+            </div>
+        </section>
+    </main>
 {% endblock %}
 
 {% block extra_scripts %}

@@ -1,35 +1,199 @@
-/* Homepage specific styles */
-.featured-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
-.products { gap: 16px; background: #C2B280; border-radius: 12px;}
+/* Homepage styles to match the provided design image */
+:root{
+	--max-width:1200px;
+	--accent:#2f6b3a; /* green */
+	--muted:#f5f6f7;
+	--card-bg:#ffffff;
+	--radius:14px;
+}
 
-/* Hide the global brand icon on the homepage (if present) */
-.brand { display: none !important; }
+.homepage{
+	background: var(--muted);
+	padding: 28px 0 80px;
+	min-height: calc(100vh - 120px);
+}
 
+.container{
+	width: min(1100px, calc(100% - 64px));
+	margin: 0 auto;
+}
 
-/* Hide price/description and remove them from flow on the homepage */
-.homepage .product-card .product-price,
-.homepage .product-card .product-description {
-	/* collapse visually but keep element measurable for smooth transition */
-	max-height: 0;
-	opacity: 0;
-	overflow: hidden;
-	transform: translateY(-6px);
-	/* slow the expansion for a gentler, more noticeable reveal */
-	/* slightly slower initial reveal: longer fade & slide durations */
-	transition: max-height .6s cubic-bezier(.2,.8,.2,1), opacity .5s ease, transform .7s cubic-bezier(.2,.8,.2,1);
-	/* ensure block-level layout for max-height calculations */
+/* Hero */
+.hero{
+	margin-top: 8px;
+}
+
+.hero-inner{
+	display: grid;
+	grid-template-columns: 1fr 520px;
+	gap: 32px;
+	align-items: center;
+	background: var(--card-bg);
+	border-radius: var(--radius);
+	padding: 56px 48px;
+	box-shadow: 0 6px 22px rgba(15,20,25,0.06);
+}
+
+.hero-copy{
+	padding-right: 12px;
+}
+
+.hero-title{
+	font-size: clamp(42px, 6vw, 84px);
+	line-height: 0.95;
+	margin: 0 0 18px 0;
+	font-weight: 800;
+	letter-spacing: 1px;
+	color: #0b0b0b;
+	text-transform: uppercase;
+	/* Prevent the browser from breaking words across lines (keep whole words together) */
+	word-break: normal;
+	overflow-wrap: normal;
+	hyphens: none;
 	display: block;
+	box-sizing: border-box;
+	/* limit headline width so it wraps naturally inside its column instead of overflowing */
+	max-width: 48ch;
 }
 
-/* Reveal on hover (external stylesheet version) with a gentle slide+fade */
-.homepage .product-card:hover .product-price,
-.homepage .product-card:hover .product-description {
-	max-height: 1000px; /* increase cap so long descriptions are not cut off */
-	opacity: 1;
-	transform: translateY(0);
-	/* make the collapse quicker by using shorter transition durations while hovered
-	   (the active transition duration used when leaving hover will be this value) */
-	transition: max-height .28s ease, opacity .18s ease, transform .18s ease;
+.hero-sub{
+	font-size: 18px;
+	color: #333;
+	margin: 0 0 20px 0;
 }
 
-/* If you prefer the content to collapse instead of reserve space, change to display:none */
+.btn{
+	display:inline-block;
+	text-decoration:none;
+	padding: 12px 22px;
+	border-radius: 8px;
+	font-weight:600;
+}
+
+.btn-primary{
+	background: var(--accent);
+	color: #fff;
+}
+
+.hero-cta{
+	margin-top: 6px;
+}
+
+.hero-image img{
+	width:100%;
+	height:auto;
+	display:block;
+	object-fit:contain;
+}
+
+/* Categories */
+.section-title{
+	text-align:center;
+	margin: 48px 0 18px;
+	font-size: 20px;
+	letter-spacing: 1px;
+	font-weight:700;
+}
+
+.category-grid{
+	display:grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 22px;
+	align-items:stretch;
+}
+
+.category-card{
+	background: #fff;
+	border-radius: 12px;
+	text-align:center;
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	padding: 22px;
+	box-shadow: 0 6px 18px rgba(15,20,25,0.04);
+	color: #111;
+	text-decoration: none;
+}
+
+.category-card img{
+	width:100%;
+	height:140px;
+	object-fit:contain;
+	display:block;
+	margin-bottom: 18px;
+}
+
+.category-label{
+	display:block;
+	font-weight:700;
+	font-size:18px;
+	color:#111;
+}
+
+/* Hover / focus polish: slight lift + scale with subtle shadow */
+.category-card{
+	transition: transform .18s ease, box-shadow .18s ease;
+	will-change: transform;
+}
+.category-card:hover,
+.category-card:focus-within{
+	transform: translateY(-6px) scale(1.02);
+	box-shadow: 0 10px 28px rgba(11,12,15,0.08);
+}
+
+/* Responsive */
+@media (max-width: 900px){
+	.hero-inner{
+		grid-template-columns: 1fr;
+		padding: 36px 22px;
+	}
+	.hero-image{ order: -1; }
+	.hero-title{ text-align:center; }
+	.hero-sub{ text-align:center; }
+	.category-grid{ grid-template-columns: 1fr; }
+}
+
+@media (max-width: 1200px){
+	.hero-inner{ grid-template-columns: 1fr 380px; }
+	.hero-title { /* reduce headline max to avoid overflow near tablet widths */ font-size: clamp(36px,5.2vw,56px); max-width:44ch; }
+}
+
+/* Intermediate widths where image visually sits left of the copy (tablet-ish). Nudge copy left slightly
+   so headline is closer to the image and avoids overflowing the card. Keep the shift subtle. */
+@media (min-width: 901px) and (max-width: 1200px) {
+	/* Allow grid children to shrink instead of forcing overflow */
+	.hero-inner > * { min-width: 0; }
+	/* Avoid using translate which can cause overlap/clipping; give the copy column a bit more room */
+	.hero-inner { grid-template-columns: 1fr 420px; }
+	.hero-title { max-width: 100%; overflow-wrap: break-word; }
+}
+
+/* Tweak hero title and layout at intermediate widths to avoid visual overlap
+   when the large display headline wraps aggressively. */
+@media (max-width: 1100px) {
+	.hero-inner { grid-template-columns: 1fr 340px; }
+	.hero-title {
+		/* slightly reduce max size and avoid breaking words or hyphenation */
+		font-size: clamp(32px, 5.2vw, 52px);
+		line-height: 1.06;
+		word-break: normal; /* don't break words across lines */
+		overflow-wrap: normal;
+		hyphens: none;
+		white-space: normal;
+		max-width:40ch;
+	}
+	/* When the image swaps to the left, nudge the copy slightly left so it visually groups with the image
+	   (keeps text readable but shifts it a little off-center). */
+	/* keep the copy neatly inset from the card edge; avoid negative transforms that push it outside */
+	.hero-copy { max-width: 56ch; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; text-align:left; padding-right:0; padding-left:20px; box-sizing:border-box; }
+}
+
+@media (max-width: 1000px) {
+	.hero-inner { grid-template-columns: 1fr 320px; }
+	.hero-title { font-size: clamp(30px, 6vw, 48px); line-height: 1.06; max-width:38ch; text-align:left; }
+	.hero-copy { display:flex; flex-direction:column; align-items:flex-start; justify-content:center; text-align:left; padding-right:0; padding-left:20px; box-sizing:border-box; }
+}
+
+/* Ensure the hero image doesn't grow too large and push layout awkwardly */
+.hero-image img { max-width: 100%; height: auto; max-height: 360px; }
+
