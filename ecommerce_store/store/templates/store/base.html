@@ -40,12 +40,14 @@
             </div>
         
         <div class="nav-right">
-            <a class="cart-text" href="{% url 'cart' %}">My Cart</a>
-            <a class="cart-link" href="{% url 'cart' %}" aria-label="View cart">
-                <!-- golf flag icon instead of cart SVG -->
-                <span class="cart-badge">{{ cart_item_count }}</span>
-                <img src="{% static 'store/images/golf-cart-icon-removebg-preview.png' %}" alt="Cart" class="cart-icon" />
-            </a>
+            <div class="cart-area" aria-label="Cart">
+                <a class="cart-text" href="{% url 'cart' %}">My Cart</a>
+                <a class="cart-link" href="{% url 'cart' %}" aria-label="View cart">
+                    <!-- golf flag icon instead of cart SVG -->
+                    <span class="cart-badge">{{ cart_item_count }}</span>
+                    <img src="{% static 'store/images/golf-cart-icon-removebg-preview.png' %}" alt="Cart" class="cart-icon" />
+                </a>
+            </div>
             {% if user.is_authenticated %}
                 <span class="nav-user">Hi, {{ user.username }}</span>
                 <form method="post" action="{% url 'logout' %}" style="display:inline">

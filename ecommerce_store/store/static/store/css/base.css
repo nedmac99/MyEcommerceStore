@@ -43,6 +43,39 @@ nav a:hover { text-decoration: underline; }
     filter: grayscale(1) brightness(0) invert(1);
 }
 .cart-text { margin-left: 4px; color: #fff; text-decoration: none; font-weight: 600; }
+
+/* Cart area: stack icon above label */
+.cart-area {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cart-area .cart-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* for absolute-positioned badge */
+    color: #fff; /* ensure icon link is white on the dark nav */
+}
+
+.cart-area .cart-text {
+    margin-left: 0;
+    margin-right: 6px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.cart-area .cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    transform: translate(0, 0);
+    padding: 2px 6px;
+}
 /* collapse/slide styles applied only when nav-left is made collapsible */
 .nav-left.collapsible { overflow: hidden; max-height: 0; opacity: 0; transition: max-height .28s ease, opacity .2s; }
 .main-nav.nav-open .nav-left.collapsible { max-height: 1000px; opacity: 1; }
