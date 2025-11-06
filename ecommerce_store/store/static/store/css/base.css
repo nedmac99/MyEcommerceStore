@@ -27,6 +27,7 @@ nav a:hover { text-decoration: underline; }
 .nav-container{
     width: 100%;
     position: sticky;
+    box-shadow: 0 6px 22px rgba(15, 20, 25, 0.06);
 }
 
 .main-nav { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; /* make the nav full-bleed */ /* position: fixed; */ top: 0; left: 0; right: 0; width: 100%; background: #527a56; color: #fff; z-index: 1002; box-shadow: 0 2px 6px rgba(0,0,0,0.06); padding: 12px 20px; margin: 0; border-radius: 10px;}
@@ -37,7 +38,10 @@ nav a:hover { text-decoration: underline; }
 .cart-link { display: inline-flex; align-items: center; gap: 8px; color: #333; text-decoration: none; }
 .cart-link svg { width: 20px; height: 20px; fill: none; stroke: #333; stroke-width: 1.5; }
 .cart-badge { background: #e60023; color: white; border-radius: 999px; padding: 2px 7px; font-size: 12px; font-weight: 600; }
-.cart-icon { width: 50px; height: 50px; object-fit: contain; display: inline-block; }
+.cart-icon { width: 50px; height: 50px; object-fit: contain; display: inline-block; 
+    /* render the PNG as a white icon for contrast against the green nav */
+    filter: grayscale(1) brightness(0) invert(1);
+}
 .cart-text { margin-left: 4px; color: #fff; text-decoration: none; font-weight: 600; }
 /* collapse/slide styles applied only when nav-left is made collapsible */
 .nav-left.collapsible { overflow: hidden; max-height: 0; opacity: 0; transition: max-height .28s ease, opacity .2s; }
@@ -53,9 +57,9 @@ nav a:hover { text-decoration: underline; }
     .nav-right { position: absolute; top: 12px; right: 12px; margin-left: 0; z-index: 1000; background: transparent; }
     /* Position the toggle on the left so it remains visible when nav-left is hidden */
     .nav-toggle { position: absolute; top: 12px; left: 12px; z-index: 1001; }
-    /* Hide category links by default on mobile; they will be shown when the menu is toggled */
-    .nav-left { display: none; width: 100%; }
-    .nav-left.open, .main-nav.nav-open .nav-left { display: block; }
+    /* Keep category links visible on mobile now that the hamburger was removed */
+    .nav-left { display: flex; width: 100%; }
+    .nav-left.open, .main-nav.nav-open .nav-left { display: flex; }
     .nav-left { gap: 6px; }
     .nav-left a { display: block; padding: 6px 0; }
     .nav-toggle { display: inline-flex; align-items: center; justify-content: center; padding: 6px; }
@@ -100,6 +104,67 @@ nav a:hover { text-decoration: underline; }
     transform: translateY(-2px) scale(1.06);
     filter: brightness(1.06) saturate(1.03);
     box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* Center title in navbar */
+.nav-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-weight: 900;
+    font-size: 32px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    text-transform: none;
+    z-index: 1003;
+    pointer-events: none; /* non-interactive; brand icon still links */
+    max-width: 60%;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Animate the centered title on page entry: fade + slight upward motion */
+@keyframes navCenterFadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.nav-center {
+    opacity: 0; /* start hidden then animate */
+    /* slower fade-in: 1.2s duration with 300ms initial delay */
+    animation: navCenterFadeIn 1200ms cubic-bezier(.2,.9,.2,1) 300ms forwards;
+}
+
+/* Honor user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .nav-center { animation: none; opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Decorative flag icon appended to the centered title */
+.nav-center-flag {
+    width: 50px; /* match cart icon size */
+    height: 50px;
+    margin-left: -12px; /* bring the flag closer to the text */
+    vertical-align: middle;
+    display: inline-block;
+    /* render the flag as black for contrast against white/green backgrounds */
+    filter: grayscale(1) brightness(0);
+    pointer-events: none;
+}
+
+@media (max-width: 900px) {
+    .nav-center-flag { width: 44px; height: 44px; margin-left: 6px; }
+}
+
+/* Slightly smaller on narrow screens to avoid overlap */
+@media (max-width: 900px) {
+    .nav-center { font-size: 26px; max-width: 56%; }
+}
+
+@media (max-width: 600px) {
+    .nav-center { font-size: 20px; max-width: 52%; }
 }
 
 /* Clubs dropdown */
@@ -164,4 +229,10 @@ main, .page-content {
    Uses --nav-height if JS sets it; falls back to 64px. */
 #categories {
     scroll-margin-top: calc(var(--nav-height, 64px) + 8px);
+}
+
+/* Hide the textual 'My Cart' link at and below 1070px so the header stays compact.
+   Keep the cart icon visible for access to the cart. */
+@media (max-width: 1070px) {
+    .cart-text { display: none; }
 }

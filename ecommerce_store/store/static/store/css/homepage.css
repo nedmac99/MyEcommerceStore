@@ -142,16 +142,7 @@
 }
 
 /* Responsive */
-@media (max-width: 900px){
-	.hero-inner{
-		grid-template-columns: 1fr;
-		padding: 36px 22px;
-	}
-	.hero-image{ order: -1; }
-	.hero-title{ text-align:center; }
-	.hero-sub{ text-align:center; }
-	.category-grid{ grid-template-columns: 1fr; }
-}
+/* (moved mobile rules to the end of the file) */
 
 @media (max-width: 1200px){
 	.hero-inner{ grid-template-columns: 1fr 380px; }
@@ -165,7 +156,17 @@
 	.hero-inner > * { min-width: 0; }
 	/* Avoid using translate which can cause overlap/clipping; give the copy column a bit more room */
 	.hero-inner { grid-template-columns: 1fr 420px; }
-	.hero-title { max-width: 100%; overflow-wrap: break-word; }
+	/* prevent intra-word breaks for long words like "REFURBISHED" and reduce the headline scale
+	   so the full phrase fits more naturally at tablet widths */
+	.hero-title {
+		font-size: clamp(28px, 4.6vw, 44px);
+		line-height: 1.04;
+		max-width: 36ch;
+		overflow-wrap: normal;
+		word-break: normal;
+		hyphens: none;
+	}
+
 }
 
 /* Tweak hero title and layout at intermediate widths to avoid visual overlap
@@ -196,4 +197,90 @@
 
 /* Ensure the hero image doesn't grow too large and push layout awkwardly */
 .hero-image img { max-width: 100%; height: auto; max-height: 360px; }
+
+/* Small / tablet: keep side-by-side at ~900px but tighten the image column so the copy moves closer to center.
+   For very small screens (<640px) we stack. This block is last so it takes precedence. */
+@media (max-width: 915px) and (min-width: 641px) {
+	.hero-inner{
+		grid-template-columns: 1fr 320px; /* keep two columns, narrower image column */
+		padding: 28px 20px;
+		align-items: center;
+	}
+	/* Keep image in its column (left) instead of stacking above */
+	.hero-image{ order: 0; }
+	/* Ensure grid children can shrink and the title wraps instead of overflowing */
+	.hero-inner > * { min-width: 0; }
+	.hero-title{ text-align:left; max-width:44ch; box-sizing:border-box; overflow-wrap: break-word; word-break: normal; white-space: normal; font-size: clamp(28px,5.2vw,44px); line-height:1.02; }
+	.hero-sub{ text-align:left; }
+	.category-grid{ grid-template-columns: 1fr; }
+
+	/* Constrain the image so it doesn't push the copy out of the card */
+	.hero-image img{
+		width: 100%;
+		max-width: 280px; /* smaller than column to add breathing room */
+		max-height: 260px;
+		margin: 0; /* align with copy vertically */
+		display:block;
+		object-fit:contain;
+	}
+
+	/* Move the copy closer to the visual center by reducing its left inset */
+	.hero-copy {
+		margin-left: 4%; /* smaller left offset keeps it closer to center */
+		margin-right: auto;
+		max-width: 44ch;
+		box-sizing: border-box;
+		padding-left: 8px;
+	}
+}
+
+/* Very small screens: stack layout */
+@media (max-width: 640px) {
+	.hero-inner{
+		grid-template-columns: 1fr;
+		padding: 20px 14px;
+	}
+	.hero-image{ order: -1; }
+	.hero-inner > * { min-width: 0; }
+	.hero-title{ text-align:center; max-width:100%; box-sizing:border-box; overflow-wrap: break-word; word-break: break-word; white-space: normal; font-size: clamp(20px,6.5vw,36px); line-height:1.08; }
+	.hero-sub{ text-align:center; }
+	.category-grid{ grid-template-columns: 1fr; }
+	.hero-image img{
+		width: 56%;
+		max-width: 280px;
+		max-height: 200px;
+		margin: 0 auto 18px auto;
+		display:block;
+		object-fit:contain;
+	}
+	.hero-copy { margin-left: 8%; margin-right: auto; max-width: 44ch; box-sizing: border-box; }
+}
+
+/* When viewport is <=800px hide the hero image and center the copy block so the layout reads cleanly. */
+@media (max-width: 815px) {
+	.hero-inner{
+		grid-template-columns: 1fr;
+		padding: 20px 14px;
+		align-items: center;
+	}
+	/* Remove the visual image column completely */
+	.hero-image{ display: none !important; }
+	.hero-image img{ display:none !important; }
+
+	/* Center the copy block and its contents */
+	.hero-copy{
+		margin-left: auto !important;
+		margin-right: auto !important;
+		text-align: center !important;
+		max-width: 56ch;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 8px 6px;
+		box-sizing: border-box;
+	}
+	.hero-title{ text-align:center; }
+	.hero-sub{ text-align:center; }
+}
 

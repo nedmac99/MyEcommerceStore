@@ -18,10 +18,13 @@
             <img src="{% static 'store/images/golf_club_icon.jpg' %}" alt="Refurbished Golf" class="brand-icon">
         </a>
 
-        <!-- Hamburger toggle kept for small screens: preserved class so global.js still finds it -->
-        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
-            <span class="hamburger" aria-hidden="true">☰</span>
-        </button>
+        <!-- Centered site title with decorative flag icon -->
+        <div class="nav-center" aria-hidden="false">
+            The Clubhouse
+            <img src="{% static 'store/images/golf-flag-icon-removebg-preview.png' %}" alt="" class="nav-center-flag" aria-hidden="true" />
+        </div>
+
+        <!-- hamburger removed: nav links will always be visible; JS handles absence safely -->
 
         
             <div class="nav-item has-dropdown">
@@ -41,7 +44,7 @@
             <a class="cart-link" href="{% url 'cart' %}" aria-label="View cart">
                 <!-- golf flag icon instead of cart SVG -->
                 <span class="cart-badge">{{ cart_item_count }}</span>
-                <img src="{% static 'store/images/golf-flag-icon-removebg-preview.png' %}" alt="Cart" class="cart-icon" />
+                <img src="{% static 'store/images/golf-cart-icon-removebg-preview.png' %}" alt="Cart" class="cart-icon" />
             </a>
             {% if user.is_authenticated %}
                 <span class="nav-user">Hi, {{ user.username }}</span>
