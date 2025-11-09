@@ -269,3 +269,86 @@ main, .page-content {
 @media (max-width: 1070px) {
     .cart-text { display: none; }
 }
+
+/* Login / auth page styles to match mock */
+.auth-page {
+    min-height: calc(100vh - 40px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+}
+
+.auth-card {
+    width: 420px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(11,12,15,0.12);
+    background: transparent;
+}
+
+.auth-header {
+    background: #2f6a45; /* deep green */
+    padding: 18px 28px;
+    text-align: center;
+}
+
+.auth-header h1 {
+    margin: 0;
+    color: #fff;
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: 0.2px;
+}
+
+.auth-body {
+    background: #fff;
+    padding: 28px 34px 36px;
+    border-radius: 0 0 12px 12px;
+}
+
+.auth-welcome {
+    margin: 0 0 16px 0;
+    color: #163a2b; /* darker green */
+    text-align: center;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.auth-form { display: flex; flex-direction: column; gap: 12px; }
+.form-row { display: flex; flex-direction: column; }
+.form-row input[type="text"], .form-row input[type="password"] {
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #e6e6e6;
+    background: #fff;
+    font-size: 15px;
+    outline: none;
+    box-shadow: none;
+}
+.form-row input::placeholder { color: #8b8b8b; }
+.form-row input:focus { border-color: #2f6a45; box-shadow: 0 6px 18px rgba(47,106,69,0.06); }
+
+.btn { display: inline-block; border: none; cursor: pointer; text-align: center; }
+.btn-primary {
+    background: #1f5b3a; /* solid green */
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 16px;
+}
+.btn-primary:hover { filter: brightness(1.03); }
+
+.auth-footer { text-align: center; margin-top: 14px; color: #222; }
+.auth-footer a { color: #163a2b; font-weight: 600; }
+
+.form-errors { background: #ffdada; color: #7a1b1b; padding: 8px 10px; border-radius: 6px; margin-bottom: 8px; }
+.field-error { color: #b33; font-size: 13px; margin-top: 6px; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+@media (max-width: 480px) {
+    .auth-card { width: 92%; }
+    .auth-header h1 { font-size: 20px; }
+}

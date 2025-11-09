@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib.auth import login as auth_login
-from django.contrib.auth.forms import UserCreationForm
+from .forms import CustomUserCreationForm
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.utils import timezone
@@ -299,13 +299,13 @@ def checkout_cancel(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
             messages.success(request, 'Registration successful. You are now logged in.')
             return redirect('homepage')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
 
     return render(request, 'store/register.html', {'form': form})

@@ -1,23 +1,95 @@
 {% extends 'store/base.html' %}
-{% block title %}Login{% endblock %}
+{% load static %}
+{% block title %}Log in{% endblock %}
+{% block extra_css %}
+<style>
+    /* Hide the site navigation only on the login page */
+    .nav-container, #nav-bg, .main-nav { display: none !important; }
+    /* Remove global body padding so the auth card can center exactly */
+    body { padding: 0 !important; }
+    /* Center the auth card in the viewport */
+    .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    /* Slightly narrower card to match target visual */
+    .auth-card { width: 360px; max-width: 94%; border-radius: 14px; overflow: hidden; }
+    /* Keep the page itself from scrolling; allow the card body to scroll internally on small screens */
+    html, body { height: 100%; overflow: hidden; }
+    /* Prevent touch-based overscroll on mobile (page-level) */
+    body { overscroll-behavior: none; -webkit-overflow-scrolling: auto; }
+
+    /* Header layout: show small flag to the right of the title and center both visually */
+    /* Taller header with rounded top corners */
+    .auth-header { display:flex; align-items:center; justify-content:center; gap:2px; padding: 22px 30px; background: #2f6a45 !important; border-radius: 14px 14px 0 0; }
+    .auth-header .auth-flag { width: 44px; height: auto; object-fit: contain; background: transparent !important; border-radius:0 !important; box-shadow: none !important; margin-left: 0px; }
+    .auth-header h1 { margin: 0; font-size: 26px; color: #fff !important; font-weight: 800; letter-spacing: 0.2px; }
+
+    /* Welcome headline: centered, dark green and bold */
+    /* Larger welcome headline but tighter spacing so the card height stays similar */
+    .auth-welcome { text-align: center !important; color: #163a2b !important; font-size: 28px !important; line-height: 1.05 !important; font-weight: 800 !important; margin: 0 0 12px 0 !important; }
+
+    /* Centered, narrower CTA to match target */
+    .btn-primary { display: block; width: 260px; margin: 22px auto 0; border-radius: 10px; padding: 14px 18px; font-size: 16px; background: #1f5b3a !important; color: #fff !important; border: none !important; box-shadow: 0 6px 18px rgba(31,91,58,0.06); font-weight:700; }
+
+    /* Allow the auth body to scroll when viewport is small so content isn't clipped; ensure white card body */
+    .auth-body { max-height: calc(100vh - 140px); overflow: auto; background: #fff !important; padding: 36px 28px 44px; }
+
+    /* Form layout: visually hide labels (accessibly) and make inputs full width */
+    .sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; border: 0 !important; }
+    .form-row { display: flex; flex-direction: column; }
+    /* Inputs are inset, centered and limited in width */
+    .form-row input[type="text"], .form-row input[type="password"] { display: block; max-width: 300px; margin: 10px auto; width: 100% !important; box-sizing: border-box; padding: 12px 14px !important; border-radius: 8px !important; border: 1px solid #e6e6e6 !important; background: #fff !important; font-size: 14px !important; }
+    /* Make placeholders slightly muted */
+    .form-row input::placeholder { color: #9a9a9a !important; }
+
+    /* Remove the default focus outline and replace with subtle green focus ring for accessibility */
+    .form-row input:focus { outline: none; box-shadow: 0 6px 18px rgba(47,106,69,0.06), 0 0 0 3px rgba(47,106,69,0.06) !important; border-color: #2f6a45 !important; }
+
+    /* Small tweak: shrink card slightly on narrow screens */
+    @media (max-width: 480px) {
+        .auth-card { width: 92%; }
+        .auth-header h1 { font-size: 20px; }
+    }
+    /* Nudge the footer down visually without changing layout height */
+    .auth-footer { position: relative; top: 16px !important; text-align: center; color: #222; }
+</style>
+<!-- end extra styles -->
+{% endblock %}
 {% block content %}
-<div style="max-width:420px;margin:36px auto;padding:16px">
-    <h1>Log in</h1>
-    <form method="post">
-        {% csrf_token %}
-        {% if form.errors %}
-            <p style="color:#b33">Please correct the errors below.</p>
-        {% endif %}
-        <div>
-            <label for="id_username">Username</label>
-            <input type="text" name="username" id="id_username" required>
+<div class="auth-page">
+    <div class="auth-card" role="main" aria-labelledby="auth-heading">
+        <div class="auth-header">
+            <h1 id="auth-heading">The Clubhouse</h1>
+            <img src="{% static 'store/images/golf-flag-icon-removebg-preview.png' %}" alt="" class="auth-flag" aria-hidden="true">
         </div>
-        <div>
-            <label for="id_password">Password</label>
-            <input type="password" name="password" id="id_password" required>
+        <div class="auth-body">
+            <h2 class="auth-welcome">Welcome Back</h2>
+
+            <form method="post" class="auth-form" novalidate>
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="form-errors">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                <div class="form-row">
+                    <label for="id_username" class="sr-only">Username or Email</label>
+                    <input type="text" name="username" id="id_username" placeholder="Username or Email" required autocomplete="username" value="{{ form.username.value|default_if_none:'' }}">
+                    {% if form.username.errors %}
+                        <div class="field-error">{{ form.username.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <label for="id_password" class="sr-only">Password</label>
+                    <input type="password" name="password" id="id_password" placeholder="Password" required autocomplete="current-password">
+                    {% if form.password.errors %}
+                        <div class="field-error">{{ form.password.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Log in</button>
+            </form>
+
+            <p class="auth-footer">New? <a href="{% url 'register' %}">Create an account</a></p>
         </div>
-        <button type="submit">Log in</button>
-    </form>
-    <p>New? <a href="{% url 'register' %}">Create an account</a></p>
+    </div>
 </div>
 {% endblock %}

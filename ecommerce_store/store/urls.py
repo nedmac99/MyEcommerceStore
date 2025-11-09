@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
+from .forms import UsernameOrEmailAuthenticationForm
 
 urlpatterns = [
     path('', views.homepage, name='homepage'),  # homepage
@@ -15,7 +16,7 @@ urlpatterns = [
     path('webhook/stripe/', views.stripe_webhook, name='stripe_webhook'),
     # auth
     path('accounts/register/', views.register, name='register'),
-    path('accounts/login/', auth_views.LoginView.as_view(template_name='store/login.html'), name='login'),
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='store/login.html', authentication_form=UsernameOrEmailAuthenticationForm), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(next_page='homepage'), name='logout'),
     path('cart/remove/<int:product_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('cart/remove_all/<int:product_id>/', views.remove_all_from_cart, name='remove_all_from_cart'),
