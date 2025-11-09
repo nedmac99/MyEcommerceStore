@@ -8,9 +8,27 @@
     /* Remove global body padding so the auth card can center exactly */
     body { padding: 0 !important; }
     /* Center the auth card in the viewport */
-    .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; position: relative; }
     /* Slightly narrower card to match target visual */
-    .auth-card { width: 360px; max-width: 94%; border-radius: 14px; overflow: hidden; }
+    .auth-card { width: 360px; max-width: 94%; border-radius: 14px; overflow: hidden; z-index: 1; position: relative; }
+
+    /* Background layer for the login page that shows the golf ball divots with a slight blur.
+       We use a pseudo-element so only the background is blurred and the card content remains sharp. */
+    .auth-page::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        /* Use the same media-served image referenced in base.css */
+        background-image: url('/media/products/divots_background.jpg');
+        background-size: cover;
+        background-position: center center;
+        /* Slight blur and small scale to avoid edge halo from blurring */
+        filter: blur(4px);
+        transform: scale(1.03);
+        opacity: 0.95;
+    }
     /* Keep the page itself from scrolling; allow the card body to scroll internally on small screens */
     html, body { height: 100%; overflow: hidden; }
     /* Prevent touch-based overscroll on mobile (page-level) */
