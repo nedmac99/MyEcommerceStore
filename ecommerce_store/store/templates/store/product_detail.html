@@ -14,7 +14,7 @@
             <button type="submit">Add to Cart</button>
         </form>
     {% else %}
-        <p><a href="/admin/login/">Login to add to cart</a></p>
+        <p><a href="{% url 'login' %}?next={{ request.path }}">Login to add to cart</a></p>
     {% endif %}
 {% endblock %}
 

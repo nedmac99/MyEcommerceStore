@@ -44,6 +44,13 @@ nav a:hover { text-decoration: underline; }
 }
 .cart-text { margin-left: 4px; color: #fff; text-decoration: none; font-weight: 600; }
 
+/* Auth user label in the nav (e.g. "Hi, John") */
+.nav-user {
+    font-weight: 800;
+    color: #fff;
+    margin-right: 8px;
+}
+
 /* Cart area: stack icon above label */
 .cart-area {
     display: inline-flex;

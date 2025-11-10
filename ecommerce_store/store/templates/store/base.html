@@ -49,7 +49,7 @@
                 </a>
             </div>
             {% if user.is_authenticated %}
-                <span class="nav-user">Hi, {{ user.username }}</span>
+                <span class="nav-user">Hi, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}</span>
                 <form method="post" action="{% url 'logout' %}" style="display:inline">
                     {% csrf_token %}
                     <button type="submit" class="nav-logout">Logout</button>
