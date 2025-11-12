@@ -34,11 +34,7 @@
     /* Prevent touch-based overscroll on mobile (page-level) */
     body { overscroll-behavior: none; -webkit-overflow-scrolling: auto; }
 
-    /* Header layout: show small flag to the right of the title and center both visually */
-    /* Taller header with rounded top corners */
-    .auth-header { display:flex; align-items:center; justify-content:center; gap:2px; padding: 22px 30px; background: #2f6a45 !important; border-radius: 14px 14px 0 0; }
-    .auth-header .auth-flag { width: 44px; height: auto; object-fit: contain; background: transparent !important; border-radius:0 !important; box-shadow: none !important; margin-left: 0px; }
-    .auth-header h1 { margin: 0; font-size: 26px; color: #fff !important; font-weight: 800; letter-spacing: 0.2px; }
+    /* Auth header and flag styling moved to global stylesheet (base.css) */
 
     /* Welcome headline: centered, dark green and bold */
     /* Larger welcome headline but tighter spacing so the card height stays similar */
@@ -49,6 +45,8 @@
 
     /* Allow the auth body to scroll when viewport is small so content isn't clipped; ensure white card body */
     .auth-body { max-height: calc(100vh - 140px); overflow: auto; background: #fff !important; padding: 36px 28px 44px; }
+
+    /* Home button styling moved to global stylesheet (base.css) */
 
     /* Form layout: visually hide labels (accessibly) and make inputs full width */
     .sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; border: 0 !important; }
@@ -107,6 +105,7 @@
             </form>
 
             <p class="auth-footer">New? <a href="{% url 'register' %}">Create an account</a></p>
+            <a href="{% url 'homepage' %}" class="home-btn" role="button">Home</a>
         </div>
     </div>
 </div>

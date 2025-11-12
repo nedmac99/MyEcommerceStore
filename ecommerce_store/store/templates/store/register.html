@@ -1,13 +1,85 @@
 {% extends 'store/base.html' %}
+{% load static %}
 {% block title %}Register{% endblock %}
+{% block extra_css %}
+<style>
+/* Hide global navbar on the registration page only */
+.nav-container, .main-nav { display: none !important; }
+/* If the nav occupied page spacing, remove top padding for this page */
+body { padding-top: 0 !important; }
+/* Auth header and home-btn styles are centralized in `store/static/store/css/base.css` so login/register share the same look */
+/* Two-column grid for first/last name on wider screens */
+.two-cols { display: flex; flex-direction: row; gap: 16px; }
+.two-cols .col { flex: 1; min-width: 0; }
+/* Ensure inputs expand to the column width and don't use the global centered max-width */
+.two-cols .col input, .two-cols .col .form-control {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 6px 0 0 0 !important;
+    box-sizing: border-box;
+}
+@media (max-width: 600px) {
+    .two-cols { flex-direction: column; gap: 10px; }
+}
+</style>
+{% endblock %}
 {% block content %}
-<div style="max-width:480px;margin:36px auto;padding:16px">
-    <h1>Create an account</h1>
-    <form method="post" novalidate>
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-    <p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>The Clubhouse</h1>
+            <img src="{% static 'store/images/golf-flag-icon-removebg-preview.png' %}" alt="" class="auth-flag" aria-hidden="true">
+        </div>
+        <div class="auth-body">
+            <h2 style="margin-top:0; font-size:32px;">Create Account</h2>
+            <form method="post" novalidate class="auth-form">
+                {% csrf_token %}
+
+                <div class="form-row two-cols">
+                    <div class="col">
+                        <label for="id_first_name">First Name</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="col">
+                        <label for="id_last_name">Last Name</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label for="id_email">Email</label>
+                    {{ form.email }}
+                </div>
+
+                <div class="form-row">
+                    <label for="id_username">Username</label>
+                    {{ form.username }}
+                </div>
+
+                <div class="form-row">
+                    <label for="id_password1">Password</label>
+                    {{ form.password1 }}
+                </div>
+
+                <div class="form-row">
+                    <label for="id_password2">Confirm Password</label>
+                    {{ form.password2 }}
+                </div>
+
+                <ul style="margin:6px 0 12px 12px; color:#111;">
+                    <li>Must contain at least 8 characters</li>
+                    <li>Can't be entirely numeric or personal information</li>
+                    <li>Can't be a commonly used password</li>
+                </ul>
+
+                <button type="submit" class="btn btn-primary" style="width:100%;">Register</button>
+            </form>
+
+            <div class="auth-footer" style="margin-top:18px;">
+                <p>Already have account? <a href="{% url 'login' %}">Log in</a></p>
+                <a href="{% url 'homepage' %}" class="home-btn" role="button">Home</a>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

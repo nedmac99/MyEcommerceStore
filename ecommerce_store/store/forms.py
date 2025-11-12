@@ -74,6 +74,41 @@ class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField(required=False, max_length=30)
     last_name = forms.CharField(required=False, max_length=150)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add helpful placeholders and consistent ids/classes for styling
+        self.fields['username'].widget.attrs.update({
+            'placeholder': 'Username',
+            'id': 'id_username',
+            'class': 'form-control',
+        })
+        self.fields['email'].widget.attrs.update({
+            'placeholder': 'Email',
+            'id': 'id_email',
+            'class': 'form-control',
+        })
+        self.fields['first_name'].widget.attrs.update({
+            'placeholder': 'First Name',
+            'id': 'id_first_name',
+            'class': 'form-control',
+        })
+        self.fields['last_name'].widget.attrs.update({
+            'placeholder': 'Last Name',
+            'id': 'id_last_name',
+            'class': 'form-control',
+        })
+        # password fields are PasswordInput widgets from UserCreationForm
+        self.fields['password1'].widget.attrs.update({
+            'placeholder': 'Password',
+            'id': 'id_password1',
+            'class': 'form-control',
+        })
+        self.fields['password2'].widget.attrs.update({
+            'placeholder': 'Confirm Password',
+            'id': 'id_password2',
+            'class': 'form-control',
+        })
+
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')

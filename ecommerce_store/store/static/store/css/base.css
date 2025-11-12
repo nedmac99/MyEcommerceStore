@@ -6,15 +6,28 @@ html { scroll-behavior: smooth; }
 * { box-sizing: border-box }
 body { font-family: Arial, sans-serif; padding: 20px;
     /* page background: use divots image as a single continuous background
-       (no tiling). Use cover to scale the image to fill the viewport. */
-    background-image: url('/media/products/divots_background.jpg'); /*Or golf cart?*/
-    /*background-repeat: no-repeat;*/
+       (no tiling). The real blurred background is provided by the
+       `body::before` pseudo-element below; we keep a subtle fallback color. */
+    background-color: #f4f6f2;
+}
+
+/* Blurred background layer using the divots image. Using a fixed
+   pseudo-element keeps it behind all content while allowing a CSS
+   filter:blur() to be applied. The original body background is left as
+   a lightweight fallback for browsers that don't support ::before. */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0; /* top:0; right:0; bottom:0; left:0 */
+    pointer-events: none; /* allow clicks through to page content */
+    background-image: url('/media/products/divots_background.jpg');
     background-repeat: repeat;
     background-position: center top;
-    background-attachment: fixed;
-    /* subtle fallback color while image loads */
-    /*background-size: cover;*/
-    background-color: #f4f6f2;
+    background-size: cover;
+    filter: blur(6px) saturate(1.02);
+    /* slightly scale so blurred edges don't show faint seams */
+    transform: scale(1.02);
+    z-index: -1; /* sit behind content; nav has higher z-index */
 }
 nav a { margin-right: 10px; text-decoration: none; color: #333; font-size: 16px;}
 nav a:hover { text-decoration: underline; }
@@ -295,9 +308,14 @@ main, .page-content {
 }
 
 .auth-header {
+    /* Mirror the login/register visual: centered flex header with a small flag to the side */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     background: #2f6a45; /* deep green */
     padding: 18px 28px;
-    text-align: center;
+    border-radius: 12px 12px 0 0;
 }
 
 .auth-header h1 {
@@ -306,6 +324,17 @@ main, .page-content {
     font-weight: 800;
     font-size: 26px;
     letter-spacing: 0.2px;
+}
+
+/* Small decorative flag that appears to the side of the auth header title */
+.auth-header .auth-flag {
+    width: 44px;
+    height: auto;
+    object-fit: contain;
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin-left: 0;
 }
 
 .auth-body {
@@ -324,7 +353,7 @@ main, .page-content {
 
 .auth-form { display: flex; flex-direction: column; gap: 12px; }
 .form-row { display: flex; flex-direction: column; }
-.form-row input[type="text"], .form-row input[type="password"] {
+.form-row input, .form-row textarea, .form-row select, .form-row .form-control {
     padding: 12px 14px;
     border-radius: 8px;
     border: 1px solid #e6e6e6;
@@ -333,8 +362,8 @@ main, .page-content {
     outline: none;
     box-shadow: none;
 }
-.form-row input::placeholder { color: #8b8b8b; }
-.form-row input:focus { border-color: #2f6a45; box-shadow: 0 6px 18px rgba(47,106,69,0.06); }
+.form-row input::placeholder, .form-row .form-control::placeholder { color: #8b8b8b; }
+.form-row input:focus, .form-row .form-control:focus { border-color: #2f6a45; box-shadow: 0 6px 18px rgba(47,106,69,0.06); }
 
 .btn { display: inline-block; border: none; cursor: pointer; text-align: center; }
 .btn-primary {
@@ -349,6 +378,10 @@ main, .page-content {
 
 .auth-footer { text-align: center; margin-top: 14px; color: #222; }
 .auth-footer a { color: #163a2b; font-weight: 600; }
+
+/* Small outline 'Home' button used on auth pages (login, register) */
+.home-btn { display: block; width: 200px; margin: 10px auto 0; border-radius: 8px; padding: 10px 14px; font-size: 15px; text-align: center; background: transparent; color: #163a2b; border: 1px solid #dfe6df; font-weight: 700; text-decoration: none; transform: translateY(16px); }
+.home-btn:hover { background: rgba(31,91,58,0.18); }
 
 .form-errors { background: #ffdada; color: #7a1b1b; padding: 8px 10px; border-radius: 6px; margin-bottom: 8px; }
 .field-error { color: #b33; font-size: 13px; margin-top: 6px; }

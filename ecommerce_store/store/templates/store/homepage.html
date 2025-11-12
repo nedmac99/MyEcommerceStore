@@ -112,5 +112,11 @@
             /* shorter transitions while hovered so collapse is quicker */
             transition: max-height .28s ease, opacity .18s ease, transform .18s ease !important;
         }
+        /* Make login/register links in the header white on the homepage */
+        .nav-right > a { color: #fff !important; font-weight: 700; }
+        .nav-right > a:hover { text-decoration: underline; }
+
+        /* Give the main homepage container rounded corners and clip its contents */
+        .homepage { border-radius: 25px; overflow: hidden; }
     </style>
 {% endblock %}
