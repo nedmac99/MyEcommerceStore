@@ -64,6 +64,53 @@ nav a:hover { text-decoration: underline; }
     margin-right: 8px;
 }
 
+/* Modern themed logout button: pill outline with subtle glass + interactive states */
+.nav-logout {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.35);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    transition: background .18s ease, box-shadow .22s ease, transform .18s ease, border-color .18s ease;
+}
+.nav-logout:hover {
+    background: rgba(255,255,255,0.22);
+    border-color: rgba(255,255,255,0.55);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+    transform: translateY(-2px);
+}
+.nav-logout:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+}
+.nav-logout:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.5), 0 4px 14px rgba(0,0,0,0.18);
+}
+.nav-logout:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+/* Fade-out animation when AJAX logout triggers */
+.nav-logout.is-logging-out {
+    animation: logoutFade .32s ease forwards;
+}
+@keyframes logoutFade {
+    to { opacity: 0; transform: translateY(-4px); }
+}
+
 /* Cart area: stack icon above label */
 .cart-area {
     display: inline-flex;

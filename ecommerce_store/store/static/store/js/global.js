@@ -221,3 +221,42 @@ window.addEventListener('load', function(){
     try { adjustNavToggle(); } catch(e){}
     try { updateNavHeight(); } catch(e){}
 });
+
+// AJAX logout to prevent white flash / full reload
+document.addEventListener('DOMContentLoaded', function(){
+    const logoutForm = document.getElementById('logout-form');
+    if (!logoutForm) return;
+    logoutForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        const btn = logoutForm.querySelector('.nav-logout');
+        if (btn) btn.classList.add('is-logging-out');
+        const csrf = logoutForm.querySelector('input[name=csrfmiddlewaretoken]')?.value || getCookie('csrftoken');
+        const loginUrl = logoutForm.getAttribute('data-login-url');
+        const registerUrl = logoutForm.getAttribute('data-register-url');
+        fetch(logoutForm.action, {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrf },
+            credentials: 'same-origin'
+        }).then(resp => {
+            // regardless of redirect success, treat as logged out
+            const navRight = document.querySelector('.nav-right');
+            if (!navRight) { window.location.href = loginUrl || '/login/'; return; }
+            // remove greeting + form
+            navRight.querySelectorAll('.nav-user, #logout-form').forEach(el => el.remove());
+            // add login/register links
+            const loginA = document.createElement('a');
+            loginA.href = loginUrl || '/login/';
+            loginA.textContent = 'Login';
+            const registerA = document.createElement('a');
+            registerA.href = registerUrl || '/register/';
+            registerA.textContent = 'Register';
+            navRight.appendChild(loginA);
+            navRight.appendChild(registerA);
+            showToast('Logged out');
+            try { adjustNavToggle(); } catch(e){}
+        }).catch(() => {
+            // fallback: full redirect
+            window.location.href = loginUrl || '/login/';
+        });
+    });
+});

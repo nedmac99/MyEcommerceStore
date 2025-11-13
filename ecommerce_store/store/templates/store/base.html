@@ -49,10 +49,10 @@
                 </a>
             </div>
             {% if user.is_authenticated %}
-                <span class="nav-user">Hi, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}</span>
-                <form method="post" action="{% url 'logout' %}" style="display:inline">
+                <span class="nav-user">Hi, {% if user.first_name %}{{ user.first_name|capfirst }}{% else %}{{ user.username }}{% endif %}</span>
+                <form method="post" action="{% url 'logout' %}" style="display:inline" id="logout-form" data-login-url="{% url 'login' %}" data-register-url="{% url 'register' %}">
                     {% csrf_token %}
-                    <button type="submit" class="nav-logout">Logout</button>
+                    <button type="submit" class="nav-logout" aria-label="Logout">Logout</button>
                 </form>
             {% else %}
                 <a href="{% url 'login' %}">Login</a>
