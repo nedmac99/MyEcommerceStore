@@ -312,7 +312,7 @@ main, .page-content {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 2px;
     background: #2f6a45; /* deep green */
     padding: 18px 28px;
     border-radius: 12px 12px 0 0;
@@ -328,7 +328,8 @@ main, .page-content {
 
 /* Small decorative flag that appears to the side of the auth header title */
 .auth-header .auth-flag {
-    width: 44px;
+    /* slightly larger flag for login/register headers */
+    width: 48px;
     height: auto;
     object-fit: contain;
     background: transparent !important;
