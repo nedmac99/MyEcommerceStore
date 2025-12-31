@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" aria-hidden="true">
+  <title>Golf club icon</title>
+  <g fill="none" stroke="#222" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 56c0-4 8-8 20-12s24-8 28-6" opacity="0.9" />
+    <path d="M46 32l14-14" />
+    <path d="M42 36l6-6" />
+    <rect x="10" y="44" width="36" height="6" rx="2" transform="rotate(-18 28 47)" />
+  </g>
+</svg>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout</title>
+</head>
+<body>
+<h1>Checkout</h1>
+
+{% if order %}
+    <p>Thank you, {{ request.user.username }}! Your order of ${{ order.total_price }} has been completed.</p>
+{% else %}
+    <p>No order to checkout.</p>
+{% endif %}
+
+<a href="{% url 'home' %}">Back to Home</a>
+</body>
+</html>
